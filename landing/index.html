@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StudioMS — Gestionale per studio osteopatico: agenda, cartella, fatture e Tessera Sanitaria</title>
+<meta name="description" content="Agenda multi-professionista, cartella clinica cifrata, fatture con PDF e promemoria WhatsApp automatici. Una web app italiana per studi osteopatici. Prenota 20 minuti.">
+<link rel="canonical" href="https://studioms.it/">
+<meta name="theme-color" content="#1B448A">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<meta property="og:site_name" content="StudioMS">
+<meta property="og:title" content="Il gestionale che fa girare lo studio osteopatico.">
+<meta property="og:description" content="Agenda, cartella clinica cifrata, fatture e Tessera Sanitaria in un'unica web app italiana. Anche da telefono.">
+<meta property="og:image" content="assets/screens/webp/agenda-wide-1440.webp">
+<meta property="og:url" content="https://studioms.it/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/brand/logo.webp" type="image/webp">
+<link rel="preload" href="assets/fonts/Inter-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://studioms.it/#software",
+      "name": "StudioMS",
+      "description": "Gestionale per studio osteopatico: agenda multi-professionista, cartella clinica cifrata, fatturazione con PDF, Sistema Tessera Sanitaria e promemoria WhatsApp automatici.",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "inLanguage": "it-IT",
+      "url": "https://studioms.it/",
+      "featureList": [
+        "Agenda multi-professionista in tempo reale",
+        "Cartella clinica cifrata con audit log",
+        "Fatturazione con PDF e numerazione annuale",
+        "Sistema Tessera Sanitaria con ricevute ed export",
+        "Promemoria e conferme WhatsApp automatiche"
+      ],
+      "publisher": { "@id": "https://studioms.it/#organization" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://studioms.it/#organization",
+      "name": "StudioMS",
+      "url": "https://studioms.it/",
+      "logo": "https://studioms.it/assets/brand/logo.webp"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://studioms.it/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Serve installare qualcosa?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. È una web app: si apre dal browser su desktop, tablet e telefono, senza installazioni." }
+        },
+        {
+          "@type": "Question",
+          "name": "Dove stanno i dati dei pazienti?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Su infrastruttura in Unione Europea, con backup cifrati. Ogni studio ha la sua istanza." }
+        },
+        {
+          "@type": "Question",
+          "name": "Devo usare tutti i moduli subito?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. I moduli si attivano per studio: puoi partire da agenda e pazienti e aggiungere fatturazione e Tessera Sanitaria dopo." }
+        },
+        {
+          "@type": "Question",
+          "name": "Funziona con il mio numero WhatsApp?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Serve un numero dedicato e la configurazione del webhook con WhatsApp Cloud API di Meta. La facciamo insieme in attivazione." }
+        },
+        {
+          "@type": "Question",
+          "name": "Gestisce più professionisti?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Sì. Ogni professionista ha agenda, disponibilità e credenziali TS proprie; il titolare vede tutto." }
+        },
+        {
+          "@type": "Question",
+          "name": "Quanto tempo serve per partire?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Il setup guidato copre account, dati dello studio, orari e categorie. La configurazione iniziale la facciamo con te in call." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body data-wa-number="">
+<!-- Numero WhatsApp di destinazione: qui, in formato internazionale senza "+", spazi o trattini.
+     Esempio: data-wa-number="393331234567". Se resta vuoto, il link apre WhatsApp
+     e il visitatore sceglie il contatto: il messaggio è già scritto. -->
+<a class="skip-link" href="#main">Salta al contenuto</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="#main" aria-label="StudioMS — torna all'inizio">
+      <img src="assets/brand/logo.webp" alt="" width="28" height="25" decoding="async">
+      <span>StudioMS</span>
+    </a>
+    <nav class="site-nav" aria-label="Sezioni">
+      <a href="#come-funziona">Come funziona</a>
+      <a href="#moduli">Moduli</a>
+      <a href="#prezzi">Prezzi</a>
+      <a href="#domande">Domande</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" href="#demo">Prenota una demo</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============================ HERO ============================ -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Gestionale per studi osteopatici</p>
+        <h1 id="hero-title">Il gestionale che fa girare lo studio osteopatico.</h1>
+        <p class="hero-sub">Agenda multi-professionista, cartella clinica cifrata, fatture con PDF e Tessera Sanitaria. Un'unica web app italiana, anche da telefono.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#demo">Prenota 20 minuti <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn btn-ghost" href="#moduli">Guarda le schermate</a>
+        </div>
+        <ul class="micro-row" aria-label="In sintesi">
+          <li>Nessuna installazione</li>
+          <li>Dati in Unione Europea</li>
+          <li>Si apre dal browser</li>
+        </ul>
+      </div>
+
+      <figure class="hero-media" data-reveal>
+        <img class="hero-desktop"
+             src="assets/screens/webp/agenda-wide-720.webp"
+             srcset="assets/screens/webp/agenda-wide-720.webp 720w, assets/screens/webp/agenda-wide-1440.webp 1440w"
+             sizes="(max-width: 900px) 92vw, 620px"
+             width="1440" height="810"
+             alt="Agenda di StudioMS su desktop: calendario settimanale e appuntamenti della giornata"
+             fetchpriority="high" decoding="async">
+        <img class="hero-phone"
+             src="assets/screens/webp/mobile-agenda-720.webp"
+             srcset="assets/screens/webp/mobile-agenda-720.webp 720w, assets/screens/webp/mobile-agenda-1440.webp 1440w"
+             sizes="(max-width: 900px) 34vw, 210px"
+             width="1290" height="2796"
+             alt="La stessa agenda su telefono, con la vista del giorno"
+             fetchpriority="low" decoding="async">
+        <figcaption>Schermate reali dell'applicazione.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============================ 01 PROBLEMA ============================ -->
+  <section class="section" id="problema" aria-labelledby="problema-title">
+    <div class="container">
+      <header class="section-head" data-reveal>
+        <p class="eyebrow"><span>01</span> — Il problema</p>
+        <h2 id="problema-title">Cinque strumenti, nessun quadro d'insieme.</h2>
+        <p class="lead">Se gestisci uno studio, queste scene le conosci già.</p>
+      </header>
+
+      <ol class="pain-grid">
+        <li class="pain" data-reveal style="--i:0">
+          <span class="pain-num">01</span>
+          <h3>Due pazienti, stesso orario.</h3>
+          <p>Il calendario vive su un dispositivo, la prenotazione arriva su un altro. Il conflitto lo scopri quando sono entrambi in sala d'attesa.</p>
+        </li>
+        <li class="pain" data-reveal style="--i:1">
+          <span class="pain-num">02</span>
+          <h3>La disdetta è rimasta in chat.</h3>
+          <p>Il paziente scrive su WhatsApp mentre sei in trattamento. Lo slot resta occupato e nessuno lo riempie.</p>
+        </li>
+        <li class="pain" data-reveal style="--i:2">
+          <span class="pain-num">03</span>
+          <h3>Le fatture si accumulano.</h3>
+          <p>Numerazione, PDF, incassi: tutto rimandato a fine mese, quando hai meno tempo.</p>
+        </li>
+        <li class="pain" data-reveal style="--i:3">
+          <span class="pain-num">04</span>
+          <h3>La Tessera Sanitaria è in ritardo.</h3>
+          <p>La coda la ricostruisci a mano, con il rischio di trasmettere due volte la stessa prestazione.</p>
+        </li>
+        <li class="pain" data-reveal style="--i:4">
+          <span class="pain-num">05</span>
+          <h3>Le note cliniche su carta.</h3>
+          <p>Consensi, storico e appunti in tre posti diversi, senza sapere chi ha letto cosa.</p>
+        </li>
+      </ol>
+
+      <p class="closing-line" data-reveal>Presi uno per uno sembrano dettagli. Insieme sono ore non pagate, ogni settimana.</p>
+    </div>
+  </section>
+
+  <!-- ============================ 02 MECCANISMO ============================ -->
+  <section class="section" id="come-funziona" aria-labelledby="flusso-title">
+    <div class="container">
+      <header class="section-head" data-reveal>
+        <p class="eyebrow"><span>02</span> — Il meccanismo</p>
+        <h2 id="flusso-title">Un solo flusso, dalla prenotazione alla trasmissione.</h2>
+        <p class="lead">Non è un'agenda con dei moduli intorno. I cinque passi leggono lo stesso dato: il paziente che scrivi in cartella è lo stesso che fatturi e trasmetti.</p>
+      </header>
+
+      <ol class="steps" data-reveal>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true"></span>
+          <span class="step-num">01</span>
+          <h3>Agenda</h3>
+          <p>Appuntamenti e disponibilità per professionista, aggiornati in tempo reale.</p>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true"></span>
+          <span class="step-num">02</span>
+          <h3>Paziente</h3>
+          <p>Anagrafica, consensi e stato GDPR in un'unica scheda.</p>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true"></span>
+          <span class="step-num">03</span>
+          <h3>Cartella</h3>
+          <p>Sessioni cifrate, numerazione progressiva, audit degli accessi.</p>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true"></span>
+          <span class="step-num">04</span>
+          <h3>Fattura</h3>
+          <p>Numerazione annuale, PDF e snapshot legale dei dati.</p>
+        </li>
+        <li class="step">
+          <span class="step-dot" aria-hidden="true"></span>
+          <span class="step-num">05</span>
+          <h3>Tessera Sanitaria</h3>
+          <p>Coda di trasmissione con ricevute, senza doppi invii.</p>
+        </li>
+      </ol>
+
+      <p class="band-note" data-reveal>I promemoria WhatsApp partono da qui: conferma, spostamento e disdetta aggiornano l'agenda senza che tu tocchi niente.</p>
+    </div>
+  </section>
+
+  <!-- ============================ 03 MODULI ============================ -->
+  <section class="section" id="moduli" aria-labelledby="moduli-title">
+    <div class="container">
+      <header class="section-head" data-reveal>
+        <p class="eyebrow"><span>03</span> — Cosa c'è dentro</p>
+        <h2 id="moduli-title">Cinque moduli, attivi solo quelli che ti servono.</h2>
+        <p class="lead">Ogni studio parte da dove vuole: agenda e pazienti, poi cartella, poi fatture e TS, poi WhatsApp.</p>
+      </header>
+
+      <div class="module-list">
+
+        <article class="module" data-reveal>
+          <div class="module-copy">
+            <p class="module-label">Modulo 01</p>
+            <h3>Agenda</h3>
+            <p class="module-title">La giornata, senza sorprese.</p>
+            <ul class="ticks">
+              <li>Mese, settimana e giorno nello stesso posto.</li>
+              <li>Agenda per professionista, con il filtro che resta sul dispositivo.</li>
+              <li>Un solo stato condiviso: la doppia prenotazione non è possibile.</li>
+            </ul>
+          </div>
+          <figure class="module-media">
+            <img src="assets/screens/webp/agenda-720.webp"
+                 srcset="assets/screens/webp/agenda-720.webp 720w, assets/screens/webp/agenda-1440.webp 1440w"
+                 sizes="(max-width: 900px) 92vw, 560px"
+                 width="1440" height="900" loading="lazy" decoding="async"
+                 alt="Schermata Agenda: calendario del mese, appuntamenti del giorno e filtro per professionista">
+            <figcaption>Schermata reale — dati di esempio.</figcaption>
+          </figure>
+        </article>
+
+        <article class="module module-flip" data-reveal>
+          <div class="module-copy">
+            <p class="module-label">Modulo 02</p>
+            <h3>Pazienti e cartella clinica</h3>
+            <p class="module-title">Il fascicolo che non si perde.</p>
+            <ul class="ticks">
+              <li>Anagrafica, consensi versionati e stato GDPR in una scheda.</li>
+              <li>Sessioni cliniche cifrate con numerazione progressiva.</li>
+              <li>Audit log immutabile degli accessi.</li>
+            </ul>
+          </div>
+          <figure class="module-media">
+            <img src="assets/screens/webp/scheda-paziente-720.webp"
+                 srcset="assets/screens/webp/scheda-paziente-720.webp 720w, assets/screens/webp/scheda-paziente-1440.webp 1440w"
+                 sizes="(max-width: 900px) 92vw, 560px"
+                 width="1440" height="900" loading="lazy" decoding="async"
+                 alt="Scheda paziente con dati anagrafici, consensi e azioni GDPR">
+            <figcaption>Schermata reale — dati di esempio.</figcaption>
+          </figure>
+        </article>
+
+        <article class="module" data-reveal>
+          <div class="module-copy">
+            <p class="module-label">Modulo 03</p>
+            <h3>Fatturazione</h3>
+            <p class="module-title">Fatture il giorno stesso.</p>
+            <ul class="ticks">
+              <li>Numerazione annuale YYYY/NNN, senza buchi.</li>
+              <li>PDF con snapshot legale dei dati al momento dell'emissione.</li>
+              <li>Stato degli incassi sempre visibile.</li>
+            </ul>
+          </div>
+          <figure class="module-media">
+            <img src="assets/screens/webp/nuova-fattura-720.webp"
+                 srcset="assets/screens/webp/nuova-fattura-720.webp 720w, assets/screens/webp/nuova-fattura-1440.webp 1440w"
+                 sizes="(max-width: 900px) 92vw, 560px"
+                 width="1440" height="900" loading="lazy" decoding="async"
+                 alt="Creazione di una fattura con righe, totali e dati del paziente">
+            <figcaption>Schermata reale — dati di esempio.</figcaption>
+          </figure>
+        </article>
+
+        <article class="module module-flip" data-reveal>
+          <div class="module-copy">
+            <p class="module-label">Modulo 04</p>
+            <h3>Tessera Sanitaria</h3>
+            <p class="module-title">La coda sotto controllo.</p>
+            <ul class="ticks">
+              <li>Trasmissione con ricevute e stati leggibili.</li>
+              <li>Export CSV e XML quando serve.</li>
+              <li>Un claim impedisce l'invio duplicato.</li>
+            </ul>
+          </div>
+          <figure class="module-media">
+            <img src="assets/screens/webp/sistema-ts-720.webp"
+                 srcset="assets/screens/webp/sistema-ts-720.webp 720w, assets/screens/webp/sistema-ts-1440.webp 1440w"
+                 sizes="(max-width: 900px) 92vw, 560px"
+                 width="1440" height="900" loading="lazy" decoding="async"
+                 alt="Coda di trasmissione del Sistema Tessera Sanitaria con stati e ricevute">
+            <figcaption>Schermata reale — dati di esempio.</figcaption>
+          </figure>
+        </article>
+
+        <article class="module" data-reveal>
+          <div class="module-copy">
+            <p class="module-label">Modulo 05</p>
+            <h3>WhatsApp</h3>
+            <p class="module-title">Il promemoria che arriva davvero.</p>
+            <ul class="ticks">
+              <li>Conferme, reminder e disdette automatiche.</li>
+              <li>Il bot risponde ai messaggi in arrivo.</li>
+              <li>Ogni risposta cambia lo stato dell'appuntamento.</li>
+            </ul>
+          </div>
+          <figure class="module-media">
+            <img src="assets/screens/webp/whatsapp-720.webp"
+                 srcset="assets/screens/webp/whatsapp-720.webp 720w, assets/screens/webp/whatsapp-1440.webp 1440w"
+                 sizes="(max-width: 900px) 92vw, 560px"
+                 width="1440" height="900" loading="lazy" decoding="async"
+                 alt="Pannello WhatsApp con messaggi inviati, consegnati e letti">
+            <figcaption>Schermata reale — dati di esempio.</figcaption>
+          </figure>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 04 WHATSAPP ============================ -->
+  <section class="band" id="whatsapp" aria-labelledby="whatsapp-title">
+    <div class="container band-grid">
+      <div class="band-copy" data-reveal>
+        <p class="eyebrow eyebrow-inverse">04 — Il canale</p>
+        <h2 id="whatsapp-title">Il canale che i pazienti usano già.</h2>
+        <p class="lead lead-inverse">Nessuna app da scaricare per il paziente: riceve un messaggio, risponde con un numero.</p>
+        <ul class="band-bullets">
+          <li>Conferma, spostamento e disdetta diventano uno stato in agenda.</li>
+          <li>Se lo slot si libera, lo vedi subito.</li>
+          <li>Tutto tracciato: sai quante conferme arrivano da WhatsApp.</li>
+        </ul>
+      </div>
+
+      <figure class="chat" data-reveal aria-label="Esempio di conversazione WhatsApp generata dallo studio">
+        <div class="chat-head">
+          <span class="chat-avatar" aria-hidden="true">SR</span>
+          <span class="chat-meta">
+            <span class="chat-name">Studio Rossi</span>
+            <span class="chat-status"><span class="dot-online" aria-hidden="true"></span>online</span>
+          </span>
+        </div>
+        <div class="chat-body">
+          <div class="bubble out">Ciao Giulia, ti confermo l'appuntamento di domani alle 16:30. Rispondi 1 per confermare, 2 per spostare.<span class="time">16:12</span></div>
+          <div class="bubble in">1<span class="time">16:13</span></div>
+          <div class="bubble out">Perfetto, sei in agenda. A domani! — Studio Rossi<span class="time">16:13</span></div>
+        </div>
+        <figcaption>Conversazione di esempio. Nessun dato reale.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============================ 05 GALLERIA ============================ -->
+  <section class="section" id="prodotto" aria-labelledby="prodotto-title">
+    <div class="container">
+      <header class="section-head" data-reveal>
+        <p class="eyebrow"><span>05</span> — Il prodotto, non un mockup</p>
+        <h2 id="prodotto-title">Guardalo dal vivo.</h2>
+        <p class="lead">Cinque schermate prese dall'applicazione, non da un prototipo.</p>
+      </header>
+
+      <div class="gallery" data-reveal>
+        <div class="tabs" role="tablist" aria-label="Schermate dell'applicazione">
+          <button class="tab is-active" type="button" role="tab" id="tab-dashboard" aria-controls="panel-dashboard" aria-selected="true" tabindex="0">Dashboard</button>
+          <button class="tab" type="button" role="tab" id="tab-agenda" aria-controls="panel-agenda" aria-selected="false" tabindex="-1">Agenda</button>
+          <button class="tab" type="button" role="tab" id="tab-cartella" aria-controls="panel-cartella" aria-selected="false" tabindex="-1">Cartella paziente</button>
+          <button class="tab" type="button" role="tab" id="tab-fatture" aria-controls="panel-fatture" aria-selected="false" tabindex="-1">Fatture</button>
+          <button class="tab" type="button" role="tab" id="tab-ts" aria-controls="panel-ts" aria-selected="false" tabindex="-1">Tessera Sanitaria</button>
+          <button class="tab" type="button" role="tab" id="tab-wa" aria-controls="panel-wa" aria-selected="false" tabindex="-1">WhatsApp</button>
+        </div>
+
+        <div class="panel" role="tabpanel" id="panel-dashboard" aria-labelledby="tab-dashboard">
+          <img src="assets/screens/webp/dashboard-1440.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Dashboard con appuntamenti di oggi, pazienti, fatture in attesa e andamento del fatturato">
+        </div>
+        <div class="panel" role="tabpanel" id="panel-agenda" aria-labelledby="tab-agenda" hidden>
+          <img src="assets/screens/webp/agenda-1440.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Agenda con vista mensile, appuntamenti del giorno e filtro per professionista">
+        </div>
+        <div class="panel" role="tabpanel" id="panel-cartella" aria-labelledby="tab-cartella" hidden>
+          <img src="assets/screens/webp/cartella-clinica-1440.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Cartella clinica con sessioni numerate e note cifrate">
+        </div>
+        <div class="panel" role="tabpanel" id="panel-fatture" aria-labelledby="tab-fatture" hidden>
+          <img src="assets/screens/webp/fatturazione-1440.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Elenco fatture con numerazione, stato e importi">
+        </div>
+        <div class="panel" role="tabpanel" id="panel-ts" aria-labelledby="tab-ts" hidden>
+          <img src="assets/screens/webp/sistema-ts-1440.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Coda del Sistema Tessera Sanitaria con stati di trasmissione e ricevute">
+        </div>
+        <div class="panel" role="tabpanel" id="panel-wa" aria-labelledby="tab-wa" hidden>
+          <img src="assets/screens/webp/whatsapp-1440.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Pannello WhatsApp con statistiche di invio, consegna e lettura">
+        </div>
+      </div>
+      <p class="gallery-note">La demo navigabile con dati di esempio arriva con la prima call.</p>
+    </div>
+  </section>
+
+  <!-- ============================ 06 PREZZI ============================ -->
+  <section class="section" id="prezzi" aria-labelledby="prezzi-title">
+    <div class="container">
+      <header class="section-head" data-reveal>
+        <p class="eyebrow"><span>06</span> — Prezzi</p>
+        <h2 id="prezzi-title">Paghi i moduli che usi.</h2>
+        <p class="lead">Quattro livelli, dal singolo professionista allo studio strutturato. Il preventivo dipende da quanti professionisti e quali moduli attivi.</p>
+      </header>
+
+      <div class="plans">
+        <article class="plan" data-reveal style="--i:0">
+          <h3>Base</h3>
+          <p class="plan-for">Per chi inizia e vuole ordine.</p>
+          <ul class="plan-list">
+            <li>Agenda</li>
+            <li>Pazienti</li>
+            <li>Dashboard</li>
+          </ul>
+        </article>
+        <article class="plan" data-reveal style="--i:1">
+          <h3>Clinico</h3>
+          <p class="plan-for">Per chi vuole togliere la carta.</p>
+          <ul class="plan-list">
+            <li>Tutto di Base</li>
+            <li>Cartella clinica cifrata</li>
+          </ul>
+        </article>
+        <article class="plan" data-reveal style="--i:2">
+          <h3>Completo</h3>
+          <p class="plan-for">Per lo studio strutturato.</p>
+          <ul class="plan-list">
+            <li>Tutto di Clinico</li>
+            <li>Fatturazione</li>
+            <li>Tessera Sanitaria</li>
+          </ul>
+        </article>
+        <article class="plan" data-reveal style="--i:3">
+          <h3>Connesso</h3>
+          <p class="plan-for">Per chi ha molti appuntamenti.</p>
+          <ul class="plan-list">
+            <li>Tutto di Completo</li>
+            <li>WhatsApp automatico</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="plans-foot" data-reveal>
+        <p>Più professionisti nella stessa agenda? Si parte dal livello <strong>Studio</strong>.</p>
+        <p>Il preventivo è scritto e include attivazione e migrazione.</p>
+        <a class="btn btn-primary" href="#demo">Chiedi il preventivo <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 07 DATI ============================ -->
+  <section class="section" id="dati" aria-labelledby="dati-title">
+    <div class="container">
+      <header class="section-head" data-reveal>
+        <p class="eyebrow"><span>07</span> — Dati dei pazienti</p>
+        <h2 id="dati-title">Sono dati sanitari. Vanno trattati come tali.</h2>
+      </header>
+
+      <ul class="guarantees">
+        <li data-reveal>Campi clinici cifrati con AES-256-GCM.</li>
+        <li data-reveal>Audit log immutabile: sai chi ha aperto cosa.</li>
+        <li data-reveal>Backup cifrati, conservati in Unione Europea.</li>
+        <li data-reveal>Un'istanza per studio: i dati non si mescolano.</li>
+      </ul>
+
+      <div class="honesty" data-reveal>
+        <p>Il prodotto fornisce i controlli tecnici. Privacy policy, DPO e registro dei trattamenti restano in capo allo studio.</p>
+        <p>StudioMS gestisce PDF e adempimenti Tessera Sanitaria: non è un sistema di fatturazione elettronica via SDI.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 08 FAQ ============================ -->
+  <section class="section" id="domande" aria-labelledby="faq-title">
+    <div class="container container-narrow">
+      <header class="section-head" data-reveal>
+        <p class="eyebrow"><span>08</span> — Domande</p>
+        <h2 id="faq-title">Le obiezioni che sentiamo più spesso.</h2>
+      </header>
+
+      <div class="faq" data-reveal>
+        <details>
+          <summary>Serve installare qualcosa?</summary>
+          <p>No. È una web app: si apre dal browser su desktop, tablet e telefono, senza installazioni.</p>
+        </details>
+        <details>
+          <summary>Dove stanno i dati dei pazienti?</summary>
+          <p>Su infrastruttura in Unione Europea, con backup cifrati. Ogni studio ha la sua istanza.</p>
+        </details>
+        <details>
+          <summary>Devo usare tutti i moduli subito?</summary>
+          <p>No. I moduli si attivano per studio: puoi partire da agenda e pazienti e aggiungere fatturazione e Tessera Sanitaria dopo.</p>
+        </details>
+        <details>
+          <summary>Funziona con il mio numero WhatsApp?</summary>
+          <p>Serve un numero dedicato e la configurazione del webhook con WhatsApp Cloud API di Meta. La facciamo insieme in attivazione.</p>
+        </details>
+        <details>
+          <summary>Gestisce più professionisti?</summary>
+          <p>Sì. Ogni professionista ha agenda, disponibilità e credenziali TS proprie; il titolare vede tutto.</p>
+        </details>
+        <details>
+          <summary>Quanto tempo serve per partire?</summary>
+          <p>Il setup guidato copre account, dati dello studio, orari e categorie. La configurazione iniziale la facciamo con te in call.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 09 DEMO ============================ -->
+  <section class="section section-demo" id="demo" aria-labelledby="demo-title">
+    <div class="container demo-grid">
+      <div class="demo-copy" data-reveal>
+        <p class="eyebrow"><span>09</span> — Demo</p>
+        <h2 id="demo-title">Vediamo se fa per il tuo studio.</h2>
+        <p class="lead">Compila i campi: prepariamo il messaggio e lo apri in WhatsApp. Lo invii tu, da dove vuoi.</p>
+        <ul class="demo-points">
+          <li>20 minuti, senza impegno.</li>
+          <li>Ti mostriamo il tuo flusso, non una demo generica.</li>
+          <li>Se non fa per te, te lo diciamo.</li>
+        </ul>
+      </div>
+
+      <div class="form-card" data-reveal>
+        <form id="demo-form" novalidate>
+          <div class="field">
+            <label for="nome">Nome e cognome</label>
+            <input id="nome" name="nome" type="text" autocomplete="name" required aria-describedby="err-nome">
+            <p class="error" id="err-nome" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="studio">Studio e città</label>
+            <input id="studio" name="studio" type="text" placeholder="Studio Rossi — Bologna" required aria-describedby="err-studio">
+            <p class="error" id="err-studio" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="hint-email err-email">
+            <p class="hint" id="hint-email">Per risponderti se WhatsApp non basta.</p>
+            <p class="error" id="err-email" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="professionisti">Quanti professionisti?</label>
+            <select id="professionisti" name="professionisti" required aria-describedby="err-professionisti">
+              <option value="">Scegli…</option>
+              <option>Solo io</option>
+              <option>2–3</option>
+              <option>4–6</option>
+              <option>7 o più</option>
+            </select>
+            <p class="error" id="err-professionisti" hidden></p>
+          </div>
+
+          <fieldset class="field">
+            <legend>Cosa ti interessa di più?</legend>
+            <div class="checks">
+              <label><input type="checkbox" name="interessi" value="Agenda"> Agenda</label>
+              <label><input type="checkbox" name="interessi" value="Cartella clinica"> Cartella clinica</label>
+              <label><input type="checkbox" name="interessi" value="Fatturazione e TS"> Fatturazione e TS</label>
+              <label><input type="checkbox" name="interessi" value="WhatsApp"> WhatsApp</label>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="quando">Quando possiamo sentirti?</label>
+            <select id="quando" name="quando">
+              <option>Indifferente</option>
+              <option>Mattina (9–13)</option>
+              <option>Pomeriggio (14–18)</option>
+              <option>Sera (18–20)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="note">Note <span class="opt">(facoltativo)</span></label>
+            <textarea id="note" name="note" rows="3" placeholder="Es. usiamo Excel e carta, vogliamo trasferire i pazienti."></textarea>
+          </div>
+
+          <div class="field field-consent">
+            <label class="consent">
+              <input type="checkbox" id="consenso" name="consenso" required aria-describedby="err-consenso">
+              <span>Ho letto l'<a href="privacy.html">informativa privacy</a> e acconsento a essere contattato.</span>
+            </label>
+            <p class="error" id="err-consenso" hidden></p>
+          </div>
+
+          <button class="btn btn-primary btn-block" type="submit">Apri WhatsApp con il messaggio</button>
+          <p class="form-status" role="status" aria-live="polite" id="form-status"></p>
+        </form>
+
+        <div class="result" id="result" hidden>
+          <h3>Messaggio pronto.</h3>
+          <pre id="result-text"></pre>
+          <div class="result-actions">
+            <a class="btn btn-primary" id="wa-link" href="#" target="_blank" rel="noopener">Apri WhatsApp <span class="arrow" aria-hidden="true">→</span></a>
+            <button class="btn btn-ghost" type="button" id="copy-btn">Copia testo</button>
+          </div>
+          <p class="result-note">Il messaggio non parte da solo: lo invii tu. Se WhatsApp non si apre, copia il testo e incollalo nella chat.</p>
+        </div>
+
+        <p class="form-alt">Preferisci scrivere subito? <a id="wa-direct" href="#" target="_blank" rel="noopener">Apri WhatsApp</a></p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <img src="assets/brand/logo.webp" alt="" width="26" height="23" loading="lazy" decoding="async">
+      <div>
+        <p class="footer-name">StudioMS</p>
+        <p class="footer-tag">Gestionale per studi osteopatici.</p>
+      </div>
+    </div>
+    <nav class="footer-nav" aria-label="Informazioni">
+      <a href="#domande">Domande</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="#demo">Prenota una demo</a>
+    </nav>
+    <div class="footer-legal">
+      <p>© 2026 StudioMS</p>
+      <p>Le schermate contengono dati di esempio.</p>
+    </div>
+  </div>
+</footer>
+
+<div class="mobile-cta" id="mobile-cta" hidden>
+  <a class="btn btn-primary btn-block" href="#demo">Prenota 20 minuti</a>
+</div>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
