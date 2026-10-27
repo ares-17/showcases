@@ -4,6 +4,7 @@ node_modules/
 .qa/
 renders/
 out/
+.omo/
 *.mp4
 *.webm
 *.mov

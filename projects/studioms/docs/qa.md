@@ -25,7 +25,7 @@ Verifica:
 
 Screenshot in `.qa/` (ignorata da git): `desktop-1440.png`, `mobile-390.png`, `mobile-320.png`, `form-result.png`.
 
-**Playwright** non è una dipendenza di questa repo. Lo script lo cerca in: repo, `$PLAYWRIGHT_DIR`, `../../osteopacity/frontend/node_modules` (installazione già presente sulla macchina). Se manca:
+**Playwright** non è una dipendenza di questa repo. Lo script lo cerca in: repo, `$PLAYWRIGHT_DIR`, `../../../osteopacity/frontend/node_modules` (installazione già presente sulla macchina). Se manca:
 
 ```bash
 npm i -D playwright && npx playwright install chromium

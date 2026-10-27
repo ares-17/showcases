@@ -9,7 +9,8 @@
  * della CTA mobile. Salva gli screenshot in .qa/.
  *
  * Playwright viene cercato in: questo repo, $PLAYWRIGHT_DIR, poi
- * ../osteopacity/frontend/node_modules (installazione già presente).
+ * un'installazione sorella del workspace: ../../../osteopacity/frontend/node_modules
+ * rispetto alla radice del progetto (installazione già presente sulla macchina).
  * Esce con codice 1 al primo gruppo di controlli falliti.
  */
 import { createServer } from 'node:http';
@@ -37,7 +38,7 @@ function loadPlaywright() {
   const candidates = [
     ROOT,
     process.env.PLAYWRIGHT_DIR,
-    resolve(ROOT, '..', '..', 'osteopacity', 'frontend', 'node_modules'),
+    resolve(ROOT, '..', '..', '..', 'osteopacity', 'frontend', 'node_modules'),
   ].filter(Boolean);
   for (const dir of candidates) {
     try {
