@@ -1,0 +1,1074 @@
+<!doctype html>
+<html lang="it" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>StudioMS — Presentazione</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Public Sans";
+        src: url("assets/fonts/PublicSans-600.woff2") format("woff2");
+        font-weight: 600;
+        font-style: normal;
+      }
+      :root {
+        --ground: #f9f9ff;
+        --surface: #ffffff;
+        --ink: #191c20;
+        --muted: #44474f;
+        --accent: #1b448a;
+        --accent-soft: #dde6ff;
+        --line: #c4c6d0;
+        --hair: rgba(196, 198, 208, 0.55);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--ground);
+      }
+      .slide {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        background: var(--ground);
+        color: var(--ink);
+        font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .pad {
+        position: absolute;
+        left: 192px;
+        top: 108px;
+        width: 1536px;
+        height: 864px;
+      }
+      .rule {
+        width: 56px;
+        height: 4px;
+        border-radius: 2px;
+        background: var(--accent);
+        transform-origin: 0 50%;
+      }
+      .eyebrow {
+        margin-top: 24px;
+        font-family: "Public Sans", Inter, sans-serif;
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      h1 {
+        margin-top: 26px;
+        font-size: 108px;
+        font-weight: 900;
+        line-height: 0.99;
+        letter-spacing: -0.035em;
+      }
+      h1.md {
+        font-size: 88px;
+      }
+      h1.sm {
+        font-size: 80px;
+        line-height: 1.02;
+      }
+      .sub {
+        margin-top: 30px;
+        font-size: 38px;
+        line-height: 1.32;
+        color: var(--muted);
+        max-width: 700px;
+      }
+      .sub.tight {
+        margin-top: 24px;
+        font-size: 34px;
+        line-height: 1.3;
+      }
+      .lead {
+        font-size: 34px;
+        line-height: 1.42;
+        color: rgba(255, 255, 255, 0.86);
+        letter-spacing: -0.005em;
+      }
+      .ticks {
+        list-style: none;
+        margin-top: 40px;
+      }
+      .ticks li {
+        position: relative;
+        padding-left: 30px;
+        font-size: 34px;
+        line-height: 1.28;
+        color: var(--muted);
+      }
+      .ticks li + li {
+        margin-top: 16px;
+      }
+      .ticks li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.6em;
+        width: 16px;
+        height: 2px;
+        background: var(--accent);
+      }
+      .shot {
+        background: var(--surface);
+        border: 1px solid var(--hair);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 2px 12px rgba(25, 28, 32, 0.06);
+      }
+      .shot img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .mono {
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 600;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        height: 66px;
+        padding: 0 26px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--surface);
+        font-size: 29px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .chip.key {
+        background: var(--accent-soft);
+        border-color: transparent;
+        color: var(--accent);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      .brand img {
+        display: block;
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+      }
+      .brand span {
+        font-size: 29px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .foot {
+        font-size: 28px;
+        color: var(--muted);
+      }
+      .tool {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        width: 720px;
+        height: 88px;
+        margin-top: 14px;
+        padding: 0 30px;
+        background: var(--surface);
+        border: 1px solid var(--hair);
+        border-radius: 16px;
+        font-size: 32px;
+        font-weight: 600;
+      }
+      .tool:first-child {
+        margin-top: 0;
+      }
+      .stop {
+        width: 256px;
+      }
+      .dot {
+        display: block;
+        width: 16px;
+        height: 16px;
+        margin-bottom: 30px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+      .stop-label {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .stop-micro {
+        margin-top: 10px;
+        font-size: 28px;
+        color: var(--muted);
+      }
+      .panel {
+        width: 366px;
+        min-height: 300px;
+        padding: 36px 34px 40px;
+        background: var(--surface);
+        border: 1px solid var(--hair);
+        border-radius: 24px;
+      }
+      .panel-t,
+      .arch-t {
+        font-size: 34px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .panel-b,
+      .arch-b {
+        margin-top: 18px;
+        font-size: 28px;
+        line-height: 1.34;
+        color: var(--muted);
+      }
+      .arch {
+        width: 496px;
+        min-height: 270px;
+        padding: 36px 34px 40px;
+        background: var(--surface);
+        border: 1px solid var(--hair);
+        border-radius: 24px;
+      }
+      .trust {
+        width: 620px;
+      }
+      .trust-t {
+        font-size: 38px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .trust-b {
+        margin-top: 14px;
+        font-size: 30px;
+        line-height: 1.34;
+        color: #d2dcf3;
+      }
+      .horizon {
+        width: 480px;
+      }
+      .h-k {
+        padding-bottom: 20px;
+        border-bottom: 2px solid var(--line);
+        font-family: "Public Sans", Inter, sans-serif;
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      .h-list {
+        list-style: none;
+        margin-top: 28px;
+      }
+      .h-list li {
+        font-size: 32px;
+        line-height: 1.3;
+        color: var(--muted);
+      }
+      .h-list li + li {
+        margin-top: 20px;
+      }
+      .phone {
+        width: 392px;
+        height: 862px;
+        padding: 11px;
+        background: #191c20;
+        border-radius: 52px;
+        box-shadow: 0 18px 40px rgba(25, 28, 32, 0.18);
+      }
+      .phone img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 42px;
+        object-fit: cover;
+        object-position: top;
+      }
+      .slide.blue {
+        background: var(--accent);
+        color: #ffffff;
+      }
+      .blue .rule {
+        background: #ffffff;
+      }
+      .blue .eyebrow {
+        color: #b7caf0;
+      }
+      .blue .sub,
+      .blue .foot,
+      .blue .ticks li {
+        color: #d2dcf3;
+      }
+      .blue .ticks li::before {
+        background: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="root"
+      data-start="0"
+      data-duration="182"
+      data-width="1920"
+      data-height="1080"
+      style="position: absolute; left: 0; top: 0; width: 1920px; height: 1080px"
+    >
+      <!-- ============ 1 · Copertina ============ -->
+    <section data-hf-id="hf-tlsl"
+      class="slide clip"
+        id="s01"
+      data-composition-id="s01"
+      data-start="0"
+      data-duration="12"
+      data-label="Copertina"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-tjp3" class="pad">
+        <div data-hf-id="hf-34dx" style="position: absolute; left: 0; top: 22px; width: 1000px">
+          <div data-hf-id="hf-a46i" class="rule"></div>
+          <div data-hf-id="hf-4t5c" class="eyebrow">Gestionale per studi osteopatici</div>
+          <h1 data-hf-id="hf-zofo">Lo studio gira.<br data-hf-id="hf-x5px" />Tu torni a curare.</h1>
+          <p data-hf-id="hf-287h" class="sub" style="max-width: 660px">
+            Agenda, cartella clinica, fatturazione, Tessera Sanitaria e WhatsApp in un'unica
+            piattaforma italiana.
+          </p>
+        </div>
+
+        <div data-hf-id="hf-99fm" class="shot" style="position: absolute; left: 736px; top: 392px; width: 800px; height: 483px">
+          <img data-hf-id="hf-5b5b" src="assets/screens/dashboard--hero.png" alt="Riepilogo e andamento dello studio" />
+        </div>
+
+        <div data-hf-id="hf-xnqb" style="position: absolute; left: 0; top: 690px; display: flex; align-items: center; gap: 26px">
+          <div data-hf-id="hf-oojr" class="brand">
+            <img data-hf-id="hf-z70l" src="assets/brand/logo.webp" alt="" />
+            <span data-hf-id="hf-rfu7">StudioMS</span>
+          </div>
+          <div data-hf-id="hf-w5nz" style="width: 1px; height: 40px; background: var(--line)"></div>
+          <div data-hf-id="hf-iiv0" class="foot">Dati dimostrativi · ambiente di test</div>
+        </div>
+      </div>
+    </section>
+
+      <!-- ============ 2 · Il problema ============ -->
+    <section data-hf-id="hf-4t2y"
+      class="slide clip"
+        id="s02"
+      data-composition-id="s02"
+      data-start="12"
+      data-duration="12"
+      data-label="Il problema"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-9xbr" class="pad">
+        <div data-hf-id="hf-xhkg" style="position: absolute; left: 0; top: 96px; width: 700px">
+          <div data-hf-id="hf-ya9a" class="rule"></div>
+          <div data-hf-id="hf-qovx" class="eyebrow">La realtà di oggi</div>
+          <h1 data-hf-id="hf-8shi" class="sm">Cinque strumenti.<br data-hf-id="hf-rsrt" />Zero visione d'insieme.</h1>
+          <p data-hf-id="hf-2ub0" class="sub tight">
+            Lo studio perde tempo tra calendario, carta, fatture e WhatsApp personale.
+          </p>
+          <p data-hf-id="hf-xcnl" class="foot" style="margin-top: 34px; line-height: 1.45">
+            Doppie prenotazioni · disdette perse<br data-hf-id="hf-szow" />note non conformi · fatture a fine mese
+          </p>
+        </div>
+
+        <div data-hf-id="hf-5qb0" style="position: absolute; left: 736px; top: 292px">
+          <div data-hf-id="hf-60ee" class="tool" style="margin-left: 0">
+            <span data-hf-id="hf-1mby" class="mono" style="font-size: 28px; color: var(--accent)">01</span>Calendario
+            generico
+          </div>
+          <div data-hf-id="hf-e97j" class="tool" style="margin-left: 18px">
+            <span data-hf-id="hf-20mz" class="mono" style="font-size: 28px; color: var(--accent)">02</span>Foglio di
+            calcolo
+          </div>
+          <div data-hf-id="hf-dm55" class="tool" style="margin-left: 36px">
+            <span data-hf-id="hf-2ey0" class="mono" style="font-size: 28px; color: var(--accent)">03</span>Gestionale
+            fatture
+          </div>
+          <div data-hf-id="hf-rpp1" class="tool" style="margin-left: 54px">
+            <span data-hf-id="hf-zmst" class="mono" style="font-size: 28px; color: var(--accent)">04</span>Portale
+            Tessera Sanitaria
+          </div>
+          <div data-hf-id="hf-osrk" class="tool" style="margin-left: 72px">
+            <span data-hf-id="hf-013u" class="mono" style="font-size: 28px; color: var(--accent)">05</span>WhatsApp
+            personale
+          </div>
+        </div>
+      </div>
+    </section>
+
+      <!-- ============ 3 · La soluzione ============ -->
+    <section data-hf-id="hf-9wu6"
+      class="slide clip"
+        id="s03"
+      data-composition-id="s03"
+      data-start="24"
+      data-duration="12"
+      data-label="Un'unica piattaforma"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-9j0q" class="pad">
+        <div data-hf-id="hf-hr7f" style="position: absolute; left: 0; top: 40px; width: 1200px">
+          <div data-hf-id="hf-yokb" class="rule"></div>
+          <div data-hf-id="hf-u5h2" class="eyebrow">La soluzione</div>
+          <h1 data-hf-id="hf-y74m" class="md">Tutto il flusso,<br data-hf-id="hf-sldv" />in un posto solo.</h1>
+        </div>
+
+        <div data-hf-id="hf-xtgx" style="position: absolute; left: 0; top: 470px; width: 1536px; height: 2px; background: var(--line)"></div>
+        <div data-hf-id="hf-jch3" style="position: absolute; left: 0; top: 462px; display: flex">
+          <div data-hf-id="hf-wico" class="stop">
+            <span data-hf-id="hf-9gry" class="dot"></span>
+            <div data-hf-id="hf-a625" class="stop-label">Agenda</div>
+            <div data-hf-id="hf-yzb4" class="stop-micro">conflitti bloccati</div>
+          </div>
+          <div data-hf-id="hf-v9wg" class="stop">
+            <span data-hf-id="hf-zcc2" class="dot"></span>
+            <div data-hf-id="hf-e1en" class="stop-label">Paziente</div>
+            <div data-hf-id="hf-9hbx" class="stop-micro">consenso e GDPR</div>
+          </div>
+          <div data-hf-id="hf-u2zd" class="stop">
+            <span data-hf-id="hf-zqn3" class="dot"></span>
+            <div data-hf-id="hf-osyt" class="stop-label">Cartella</div>
+            <div data-hf-id="hf-6twv" class="stop-micro">note cifrate</div>
+          </div>
+          <div data-hf-id="hf-uhae" class="stop">
+            <span data-hf-id="hf-04y4" class="dot"></span>
+            <div data-hf-id="hf-2mx6" class="stop-label">Fattura</div>
+            <div data-hf-id="hf-0noh" class="stop-micro">PDF e numerazione</div>
+          </div>
+          <div data-hf-id="hf-tadb" class="stop">
+            <span data-hf-id="hf-0j95" class="dot"></span>
+            <div data-hf-id="hf-qknw" class="stop-label">Tessera sanitaria</div>
+            <div data-hf-id="hf-5pt8" class="stop-micro">coda e ricevute</div>
+          </div>
+          <div data-hf-id="hf-tooc" class="stop">
+            <span data-hf-id="hf-0xk6" class="dot"></span>
+            <div data-hf-id="hf-ssov" class="stop-label">WhatsApp</div>
+            <div data-hf-id="hf-7ir7" class="stop-micro">conferme e disdette</div>
+          </div>
+        </div>
+
+        <p data-hf-id="hf-ki5w" class="foot" style="position: absolute; left: 0; top: 748px; font-size: 30px">
+          Un solo accesso, un solo posto dove cercare: la scheda del paziente.
+        </p>
+      </div>
+    </section>
+
+      <!-- ============ 4 · Dashboard ============ -->
+    <section data-hf-id="hf-11i1"
+      class="slide clip"
+        id="s04"
+      data-composition-id="s04"
+      data-start="36"
+      data-duration="12"
+      data-label="Dashboard"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-94pp" class="pad">
+        <div data-hf-id="hf-ojy4" style="position: absolute; left: 0; top: 110px; width: 680px">
+          <div data-hf-id="hf-z2vc" class="rule"></div>
+          <div data-hf-id="hf-m61r" class="eyebrow">Controllo</div>
+          <h1 data-hf-id="hf-n24i" class="sm">I numeri,<br data-hf-id="hf-qluq" />ogni mattina.</h1>
+          <p data-hf-id="hf-drk9" class="sub tight">Cosa succede oggi, cosa è successo nel mese, cosa aspetta te.</p>
+          <ul data-hf-id="hf-q1ki" class="ticks">
+            <li data-hf-id="hf-pwy4">Appuntamenti di oggi e pazienti in archivio</li>
+            <li data-hf-id="hf-djjp">Fatture TS in attesa e fatturato del mese</li>
+            <li data-hf-id="hf-5jgn">Andamento di 30 giorni per stato</li>
+          </ul>
+        </div>
+
+        <div data-hf-id="hf-adun" class="shot" style="position: absolute; left: 736px; top: 120px; width: 800px; height: 625px">
+          <img data-hf-id="hf-ytuo" src="assets/screens/dashboard--pane.png" alt="Dashboard con i KPI dello studio" />
+        </div>
+      </div>
+    </section>
+
+      <!-- ============ 5 · Agenda ============ -->
+    <section data-hf-id="hf-ouuw"
+      class="slide clip"
+        id="s05"
+      data-composition-id="s05"
+      data-start="48"
+      data-duration="12"
+      data-label="Agenda"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-bwuw" class="pad">
+        <div data-hf-id="hf-5fg4" style="position: absolute; left: 0; top: 16px; width: 1536px">
+          <div data-hf-id="hf-waq5" class="rule"></div>
+          <div data-hf-id="hf-9ovd" class="eyebrow">Agenda</div>
+          <h1 data-hf-id="hf-4plq" class="md">Cambia uno slot.<br data-hf-id="hf-q7jp" />Lo sanno tutti.</h1>
+        </div>
+
+        <div data-hf-id="hf-o4hc" class="shot" style="position: absolute; left: 0; top: 372px; width: 1536px; height: 600px">
+          <img data-hf-id="hf-8wd7" src="assets/screens/agenda--band.png" alt="Agenda settimanale con gli appuntamenti" />
+        </div>
+      </div>
+    </section>
+
+      <!-- ============ 6 · Pazienti ============ -->
+    <section data-hf-id="hf-jil0"
+      class="slide clip"
+        id="s06"
+      data-composition-id="s06"
+      data-start="60"
+      data-duration="12"
+      data-label="Pazienti e GDPR"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-bijv" class="pad">
+        <div data-hf-id="hf-66n7" class="shot" style="position: absolute; left: 0; top: 120px; width: 800px; height: 625px">
+          <img data-hf-id="hf-1e0v" src="assets/screens/pazienti--pane.png" alt="Elenco pazienti con stato del consenso" />
+        </div>
+
+        <div data-hf-id="hf-8wfq" style="position: absolute; left: 896px; top: 96px; width: 640px">
+          <div data-hf-id="hf-wp16" class="rule"></div>
+          <div data-hf-id="hf-ejhb" class="eyebrow">Pazienti</div>
+          <h1 data-hf-id="hf-phuo" class="sm">Il consenso<br data-hf-id="hf-regs" />è un flusso.</h1>
+          <ul data-hf-id="hf-9jxy" class="ticks">
+            <li data-hf-id="hf-t2eg">Consenso con data e versione</li>
+            <li data-hf-id="hf-wrgk">Opposizione Tessera Sanitaria per singolo paziente</li>
+            <li data-hf-id="hf-6foh">Opt-out WhatsApp e anonimizzazione con conferma</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+      <!-- ============ 7 · Cartella clinica ============ -->
+    <section data-hf-id="hf-zm8i"
+      class="slide clip"
+        id="s07"
+      data-composition-id="s07"
+      data-start="72"
+      data-duration="12"
+      data-label="Cartella clinica"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-b48u" class="pad">
+        <div data-hf-id="hf-hfgs" style="position: absolute; left: 0; top: 16px; width: 1536px">
+          <div data-hf-id="hf-x3c7" class="rule"></div>
+          <div data-hf-id="hf-4pre" class="eyebrow">Cartella clinica</div>
+          <h1 data-hf-id="hf-o8hc" class="md">Le note che contano,<br data-hf-id="hf-r05r" />protette davvero.</h1>
+        </div>
+
+        <div data-hf-id="hf-930o" class="shot" style="position: absolute; left: 0; top: 372px; width: 1536px; height: 560px">
+          <img data-hf-id="hf-6rml" src="assets/screens/cartella--band.png" alt="Sessione clinica con le sue sezioni" style="object-position: top" />
+        </div>
+      </div>
+    </section>
+
+      <!-- ============ 8 · Fatturazione ============ -->
+    <section data-hf-id="hf-w43q"
+      class="slide clip"
+        id="s08"
+      data-composition-id="s08"
+      data-start="84"
+      data-duration="12"
+      data-label="Fatturazione"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-apxt" class="pad">
+        <div data-hf-id="hf-pnwt" style="position: absolute; left: 0; top: 106px; width: 680px">
+          <div data-hf-id="hf-xhn8" class="rule"></div>
+          <div data-hf-id="hf-6jq5" class="eyebrow">Fatturazione</div>
+          <h1 data-hf-id="hf-5tmk" class="sm">Corrette<br data-hf-id="hf-p0mm" />per costruzione.</h1>
+          <p data-hf-id="hf-rvqn" class="sub tight">Numerazione annuale, snapshot del paziente, PDF pronto da consegnare.</p>
+          <ul data-hf-id="hf-9y8z" class="ticks">
+            <li data-hf-id="hf-ew8z">Importi in centesimi interi, nel database</li>
+            <li data-hf-id="hf-uk6n">Righe, IVA e totali senza arrotondamenti</li>
+            <li data-hf-id="hf-c5nr">Emessa, inviata, annullata: con traccia</li>
+          </ul>
+        </div>
+
+        <div data-hf-id="hf-u4nz" class="shot" style="position: absolute; left: 736px; top: 120px; width: 800px; height: 625px">
+          <img data-hf-id="hf-r0qi" src="assets/screens/fatturazione--pane.png" alt="Elenco fatture con stato TS" />
+        </div>
+      </div>
+    </section>
+
+      <!-- ============ 9 · Tessera sanitaria ============ -->
+    <section data-hf-id="hf-gxvk"
+      class="slide clip"
+        id="s09"
+      data-composition-id="s09"
+      data-start="96"
+      data-duration="12"
+      data-label="Tessera sanitaria"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-di30" class="pad">
+        <div data-hf-id="hf-tlal" class="shot" style="position: absolute; left: 0; top: 168px; width: 800px; height: 528px">
+          <img data-hf-id="hf-498n" src="assets/screens/sistema-ts--pane.png" alt="Coda di trasmissione Tessera Sanitaria" />
+        </div>
+
+        <div data-hf-id="hf-96mw" style="position: absolute; left: 896px; top: 120px; width: 640px">
+          <div data-hf-id="hf-12eh" class="rule"></div>
+          <div data-hf-id="hf-uyrw" class="eyebrow">Adempimenti</div>
+          <h1 data-hf-id="hf-eifk" class="sm">In ordine,<br data-hf-id="hf-ombl" />senza pensarci.</h1>
+          <ul data-hf-id="hf-ack0" class="ticks">
+            <li data-hf-id="hf-7szr">Coda con claim anti-duplicato</li>
+            <li data-hf-id="hf-ex70">Export CSV e XML per l'anno corrente</li>
+            <li data-hf-id="hf-vazs">Ricevute, errori e opposizioni tracciati</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+      <!-- ============ 10 · WhatsApp ============ -->
+    <section data-hf-id="hf-js2d"
+      class="slide clip"
+        id="s10"
+      data-composition-id="s10"
+      data-start="108"
+      data-duration="12"
+      data-label="WhatsApp"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-d3rz" class="pad">
+        <div data-hf-id="hf-3swx" style="position: absolute; left: 0; top: 96px; width: 680px">
+          <div data-hf-id="hf-1gpi" class="rule"></div>
+          <div data-hf-id="hf-ft2j" class="eyebrow">WhatsApp</div>
+          <h1 data-hf-id="hf-qcv4" class="sm">Il paziente disdice<br data-hf-id="hf-qsyj" />dove già scrive.</h1>
+          <p data-hf-id="hf-gqoh" class="sub tight">
+            Nessuna app da installare: il bot risponde, verifica la finestra minima e libera lo
+            slot.
+          </p>
+          <div data-hf-id="hf-6tf8" style="display: flex; gap: 14px; margin-top: 36px">
+            <span data-hf-id="hf-arol" class="chip key mono" style="font-size: 28px">Cancella</span>
+            <span data-hf-id="hf-5neu" class="chip key mono" style="font-size: 28px">Appuntamenti</span>
+          </div>
+        </div>
+
+        <div data-hf-id="hf-tqcy" class="shot" style="position: absolute; left: 736px; top: 120px; width: 800px; height: 625px">
+          <img data-hf-id="hf-io03" src="assets/screens/whatsapp--pane.png" alt="Statistiche del flusso WhatsApp" />
+        </div>
+      </div>
+    </section>
+
+      <!-- ============ 11 · Team e configurazione ============ -->
+    <section data-hf-id="hf-1sz0"
+      class="slide clip"
+        id="s11"
+      data-composition-id="s11"
+      data-start="120"
+      data-duration="12"
+      data-label="Team e configurazione"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-lah1" class="pad">
+        <div data-hf-id="hf-n3h6" style="position: absolute; left: 0; top: 40px; width: 1300px">
+          <div data-hf-id="hf-l3ay" class="rule"></div>
+          <div data-hf-id="hf-ttd1" class="eyebrow">Il tuo studio, le tue regole</div>
+          <h1 data-hf-id="hf-djmv" class="md">Orari, ruoli, moduli.</h1>
+        </div>
+
+        <div data-hf-id="hf-uvjg" style="position: absolute; left: 0; top: 420px; display: flex; gap: 24px">
+          <div data-hf-id="hf-owjm" class="panel">
+            <div data-hf-id="hf-won8" class="panel-t">Team</div>
+            <p data-hf-id="hf-oivl" class="panel-b">
+              Più professionisti sullo stesso calendario, ognuno con la sua disponibilità.
+            </p>
+          </div>
+          <div data-hf-id="hf-gxly" class="panel">
+            <div data-hf-id="hf-n2ep" class="panel-t">Disponibilità</div>
+            <p data-hf-id="hf-qvxp" class="panel-b">Fasce settimanali, durata degli slot e tipi di appuntamento.</p>
+          </div>
+          <div data-hf-id="hf-hbwz" class="panel">
+            <div data-hf-id="hf-i10a" class="panel-t">Integrazioni</div>
+            <p data-hf-id="hf-2n5i" class="panel-b">Email, WhatsApp Cloud API e feed ICS per i calendari esterni.</p>
+          </div>
+          <div data-hf-id="hf-hq80" class="panel">
+            <div data-hf-id="hf-a8dr" class="panel-t">Sistema</div>
+            <p data-hf-id="hf-bnwo" class="panel-b">Stato dei servizi, log e configurazione dell'ambiente.</p>
+          </div>
+        </div>
+
+        <p class="foot" style="position: absolute; left: 0; top: 806px">
+          Tutto si configura dall'interfaccia: nessun file da modificare a mano.
+        </p>
+      </div>
+    </section>
+
+      <!-- ============ 12 · Fiducia ============ -->
+    <section data-hf-id="hf-2ogr"
+      class="slide clip blue"
+        id="s12"
+      data-composition-id="s12"
+      data-start="132"
+      data-duration="12"
+      data-label="Fiducia"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-los2" class="pad">
+        <div data-hf-id="hf-3s0y" style="position: absolute; left: 0; top: 10px; width: 1200px">
+          <div data-hf-id="hf-kozx" class="rule"></div>
+          <div data-hf-id="hf-ouxm" class="eyebrow">Fiducia</div>
+          <h1 data-hf-id="hf-xj6j" class="md">Dati clinici.<br data-hf-id="hf-r79k" />Trattati come tali.</h1>
+        </div>
+
+        <p class="lead" style="position: absolute; left: 0; top: 336px; width: 1340px">
+          Nessun dato clinico esce dallo studio senza il consenso del paziente.
+        </p>
+
+        <div data-hf-id="hf-m23d" style="position: absolute; left: 0; top: 470px; display: flex; gap: 96px">
+          <div data-hf-id="hf-7qi6" class="trust">
+            <div data-hf-id="hf-m1wd" class="trust-t">Note cifrate</div>
+            <p data-hf-id="hf-9rrn" class="trust-b">AES-256-GCM sul contenuto clinico, non solo sul disco.</p>
+          </div>
+          <div data-hf-id="hf-lalu" class="trust">
+            <div data-hf-id="hf-10zy" class="trust-t">Accessi registrati</div>
+            <p data-hf-id="hf-xgtx" class="trust-b">Ogni lettura e ogni scrittura lascia una traccia.</p>
+          </div>
+        </div>
+        <div data-hf-id="hf-0oam" style="position: absolute; left: 0; top: 662px; display: flex; gap: 96px">
+          <div data-hf-id="hf-lowv" class="trust">
+            <div data-hf-id="hf-olu5" class="trust-t">Consenso versionato</div>
+            <p data-hf-id="hf-p5uj" class="trust-b">Data, versione e revoca: sai sempre cosa hai firmato.</p>
+          </div>
+          <div data-hf-id="hf-m37w" class="trust">
+            <div data-hf-id="hf-6ny5" class="trust-t">Il database è tuo</div>
+            <p data-hf-id="hf-3zo3" class="trust-b">Installazione self-hosted: i dati non passano da noi.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+      <!-- ============ 13 · Architettura ============ -->
+    <section data-hf-id="hf-1m05"
+      class="slide clip"
+        id="s13"
+      data-composition-id="s13"
+      data-start="144"
+      data-duration="12"
+      data-label="Architettura"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-m333" class="pad">
+        <div data-hf-id="hf-e83i" style="position: absolute; left: 0; top: 40px; width: 1300px">
+          <div data-hf-id="hf-lvx0" class="rule"></div>
+          <div data-hf-id="hf-7hvb" class="eyebrow">Sotto il cofano</div>
+          <h1 data-hf-id="hf-6ifu" class="md">Semplice fuori.<br data-hf-id="hf-q0ch" />Solido dentro.</h1>
+        </div>
+
+        <div data-hf-id="hf-3gv7" style="position: absolute; left: 0; top: 430px; display: flex; gap: 24px">
+          <div data-hf-id="hf-c1zs" class="arch">
+            <div data-hf-id="hf-hvap" class="arch-t">Next.js · React</div>
+            <p data-hf-id="hf-aoez" class="arch-b">Interfaccia server-side in italiano, otto sezioni di lavoro.</p>
+          </div>
+          <div data-hf-id="hf-ad80" class="arch">
+            <div data-hf-id="hf-ifb2" class="arch-t">Go · PostgreSQL</div>
+            <p data-hf-id="hf-u99l" class="arch-b">API transazionali e vincoli che impediscono i doppi appuntamenti.</p>
+          </div>
+          <div data-hf-id="hf-96ax" class="arch">
+            <div data-hf-id="hf-f12s" class="arch-t">Aggiornamenti live</div>
+            <p data-hf-id="hf-ig7r" class="arch-b">Server-sent events: l'agenda cambia mentre la guardi.</p>
+          </div>
+        </div>
+
+        <p data-hf-id="hf-c9tc" class="foot" style="position: absolute; left: 0; top: 790px; font-size: 30px">
+          Docker Compose, PostgreSQL 16, backup nelle tue mani.
+        </p>
+      </div>
+    </section>
+
+      <!-- ============ 14 · Direzioni ============ -->
+    <section data-hf-id="hf-2qwr"
+      class="slide clip"
+        id="s14"
+      data-composition-id="s14"
+      data-start="156"
+      data-duration="12"
+      data-label="Direzioni"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-mhe4" class="pad">
+        <div data-hf-id="hf-emej" style="position: absolute; left: 0; top: 40px; width: 1300px">
+          <div data-hf-id="hf-lhlz" class="rule"></div>
+          <div data-hf-id="hf-44ta" class="eyebrow">Direzioni</div>
+          <h1 data-hf-id="hf-2mwh" class="md">Dove stiamo andando.</h1>
+        </div>
+
+        <div data-hf-id="hf-mhi0" style="position: absolute; left: 0; top: 400px; display: flex; gap: 48px">
+          <div data-hf-id="hf-t4i1" class="horizon">
+            <div data-hf-id="hf-ur0a" class="h-k">Oggi</div>
+            <ul data-hf-id="hf-02qp" class="h-list">
+              <li data-hf-id="hf-hnno">Agenda, cartella, fatture, TS, WhatsApp</li>
+              <li data-hf-id="hf-jvic">Ruoli, disponibilità e moduli</li>
+              <li data-hf-id="hf-x7tx">Installazione self-hosted</li>
+            </ul>
+          </div>
+          <div data-hf-id="hf-gxrx" class="horizon">
+            <div data-hf-id="hf-8e7o" class="h-k">Prossimo</div>
+            <ul data-hf-id="hf-tek5" class="h-list">
+              <li data-hf-id="hf-jgz9">Prenotazione online per i pazienti</li>
+              <li data-hf-id="hf-pl10">Promemoria prima della seduta</li>
+              <li data-hf-id="hf-2hab">Report mensile esportabile</li>
+            </ul>
+          </div>
+          <div data-hf-id="hf-i4p0" class="horizon">
+            <div data-hf-id="hf-5i0w" class="h-k">Dopo</div>
+            <ul data-hf-id="hf-ulh8" class="h-list">
+              <li data-hf-id="hf-m4du">Più studi sotto un unico account</li>
+              <li data-hf-id="hf-lvnz">Consenso firmato in studio</li>
+              <li data-hf-id="hf-by6h">Statistiche per professionista</li>
+            </ul>
+          </div>
+        </div>
+
+        <p data-hf-id="hf-3d09" class="foot" style="position: absolute; left: 0; top: 800px">
+          Direzioni in valutazione: nessuna data di consegna promessa.
+        </p>
+      </div>
+    </section>
+
+      <!-- ============ 15 · Chiusura ============ -->
+    <section data-hf-id="hf-0cqj"
+      class="slide clip"
+        id="s15"
+      data-composition-id="s15"
+      data-start="168"
+      data-duration="14"
+      data-label="Chiusura"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-mvp5" class="pad">
+        <div data-hf-id="hf-y759" style="position: absolute; left: 0; top: 120px; width: 860px">
+          <div data-hf-id="hf-moj2" class="rule"></div>
+          <div data-hf-id="hf-v0mi" class="eyebrow">Demo</div>
+          <h1 data-hf-id="hf-4syh" class="md">Vediamolo<br data-hf-id="hf-qeni" />sul tuo studio.</h1>
+          <p data-hf-id="hf-htxb" class="sub" style="max-width: 620px">
+            Si parte da un paziente e si arriva alla fattura. Venti minuti, sui tuoi dati.
+          </p>
+          <div data-hf-id="hf-yflw" style="display: flex; align-items: center; gap: 26px; margin-top: 86px">
+            <div data-hf-id="hf-jbzb" class="brand">
+              <img data-hf-id="hf-ybo9" src="assets/brand/logo.webp" alt="" />
+              <span data-hf-id="hf-p3pr">StudioMS</span>
+            </div>
+            <div data-hf-id="hf-ql73" style="width: 1px; height: 40px; background: var(--line)"></div>
+            <div data-hf-id="hf-krqc" class="foot">Il gestionale per studi osteopatici, in italiano.</div>
+          </div>
+        </div>
+
+        <div data-hf-id="hf-3ioi" class="phone" style="position: absolute; left: 1004px; top: 62px">
+          <img data-hf-id="hf-t7f2" src="assets/screens/mobile-agenda.png" alt="Agenda su telefono" />
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <script type="application/hyperframes-slideshow+json">
+      {
+        "slides": [
+          {
+            "sceneId": "s01",
+            "notes": "Apri con il nome dello studio, leggi la headline e fermati. Non spiegare il prodotto: lo fa la slide 3."
+          },
+          {
+            "sceneId": "s02",
+            "notes": "Elenca i cinque strumenti a voce. La frase da far passare: nessuno di questi sa cosa sta facendo l'altro."
+          },
+          {
+            "sceneId": "s03",
+            "notes": "Scorri le sei tappe con la mano. Il paziente è il centro, non il modulo."
+          },
+          {
+            "sceneId": "s04",
+            "notes": "Non leggere i numeri: sono dimostrativi. Fai notare che la schermata risponde a 'come va oggi' in un colpo d'occhio."
+          },
+          {
+            "sceneId": "s05",
+            "notes": "Densità: una settimana tipica. Se cambia uno slot, chi ha la pagina aperta lo vede senza ricaricare."
+          },
+          {
+            "sceneId": "s06",
+            "notes": "Punto delicato. Il consenso non è un PDF in una cartella: ha data, versione e uno stato per ogni paziente."
+          },
+          {
+            "sceneId": "s07",
+            "notes": "Leggi ad alta voce una riga di Anamnesi dalla schermata: è testo vero, non un segnaposto."
+          },
+          {
+            "sceneId": "s08",
+            "notes": "La frase chiave è 'corrette per costruzione': gli importi sono centesimi interi, quindi i totali tornano sempre."
+          },
+          {
+            "sceneId": "s09",
+            "notes": "Se il cliente conosce il portale TS si rilassa: la coda dice cosa manca e cosa è già trasmesso."
+          },
+          {
+            "sceneId": "s10",
+            "notes": "Il momento più forte. Il paziente scrive 'Cancella' su WhatsApp e lo slot si libera, con la finestra minima rispettata."
+          },
+          {
+            "sceneId": "s11",
+            "notes": "Qui si parla di chi ci lavora: ruoli, disponibilità, moduli. Adatta gli esempi al numero di professionisti in sala."
+          },
+          {
+            "sceneId": "s12",
+            "notes": "Rallenta. Se l'interlocutore è il titolare, questa è la slide che decide: nessun dato esce dallo studio."
+          },
+          {
+            "sceneId": "s13",
+            "notes": "Solo per chi chiede 'con cosa è fatto'. Non aprire il tema se non lo chiedono."
+          },
+          {
+            "sceneId": "s14",
+            "notes": "Sii esplicito: sono direzioni, non promesse. Serve a mostrare che il prodotto ha una traiettoria."
+          },
+          {
+            "sceneId": "s15",
+            "notes": "Chiudi con la richiesta: una demo sui loro pazienti. Lascia la slide a schermo durante le domande."
+          }
+        ]
+      }
+    </script>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+        var scenes = slides.map(function (el) {
+          var start = parseFloat(el.getAttribute("data-start")) || 0;
+          var dur = parseFloat(el.getAttribute("data-duration")) || 12;
+          return {
+            id: el.id,
+            el: el,
+            start: start,
+            end: start + dur,
+            dur: dur,
+            items: Array.prototype.slice.call(el.querySelectorAll(".pad > *")),
+            rule: el.querySelector(".rule"),
+            hero: el.querySelector(".shot img"),
+            pad: el.querySelector(".pad"),
+          };
+        });
+        var total = scenes.reduce(function (max, s) {
+          return Math.max(max, s.end);
+        }, 0);
+
+        var root = gsap.timeline({ paused: true });
+        root.to({}, { duration: total });
+        window.__timelines["root"] = root;
+
+        var clamp01 = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+        var easeOut = function (p) { return 1 - Math.pow(1 - p, 3); };
+
+        function paint(scene, lt) {
+          var i, item, p, delay;
+          for (i = 0; i < scene.items.length; i++) {
+            item = scene.items[i];
+            if (scene.id === "s01" && i === 0) {
+              item.style.opacity = "1";
+              item.style.transform = "none";
+              continue;
+            }
+            delay = scene.id === "s01" ? 0.45 + i * 0.16 : i * 0.08;
+            p = clamp01((lt - delay) / 0.5);
+            item.style.opacity = p.toFixed(4);
+            item.style.transform =
+              p >= 1 ? "none" : "translateY(" + (22 * (1 - easeOut(p))).toFixed(2) + "px)";
+          }
+          if (scene.rule) {
+            var pr = scene.id === "s01" ? 1 : easeOut(clamp01(lt / 0.5));
+            scene.rule.style.transformOrigin = "left center";
+            scene.rule.style.transform = "scaleX(" + pr.toFixed(4) + ")";
+          }
+          var ph = clamp01(lt / scene.dur);
+          if (scene.hero) {
+            scene.hero.style.transform = "scale(" + (1 + 0.035 * ph).toFixed(4) + ")";
+          } else if (scene.pad) {
+            scene.pad.style.transformOrigin = "50% 46%";
+            scene.pad.style.transform = "scale(" + (1 + 0.018 * ph).toFixed(4) + ")";
+          }
+        }
+
+        function update(t) {
+          for (var i = 0; i < scenes.length; i++) {
+            var s = scenes[i];
+            var active = t >= s.start && t < s.end;
+            s.el.style.opacity = active ? "1" : "0";
+            s.el.style.visibility = active ? "visible" : "hidden";
+            s.el.style.pointerEvents = active ? "auto" : "none";
+            if (active) paint(s, Math.max(0, t - s.start));
+          }
+        }
+
+        window.__hfSetTime = update;
+        update(0);
+
+        root.eventCallback("onUpdate", function () {
+          update(root.time());
+        });
+      })();
+
+      (function () {
+        var FPS = 30;
+        var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+        var scenes = slides.map(function (el) {
+          return {
+            id: el.id,
+            start: parseFloat(el.getAttribute("data-start")) || 0,
+            duration: parseFloat(el.getAttribute("data-duration")) || 12,
+          };
+        });
+        var total = scenes.reduce(function (max, s) {
+          return Math.max(max, s.start + s.duration);
+        }, 0);
+
+        function postTimeline() {
+          if (window.parent === window) return;
+          window.parent.postMessage(
+            {
+              source: "hf-preview",
+              type: "timeline",
+              durationInFrames: Math.round(total * FPS),
+              scenes: scenes,
+            },
+            "*",
+          );
+        }
+
+        if (document.readyState === "complete") setTimeout(postTimeline, 300);
+        else
+          window.addEventListener("load", function () {
+            setTimeout(postTimeline, 300);
+          });
+      })();
+    </script>
+  </body>
+</html>
