@@ -1,0 +1,76 @@
+{
+  "$comment": "Mappa delle schermate: master -> derivate -> consumatori. Verificata da `node tools/assets.mjs`. Aggiungere una schermata QUI prima di usarla, altrimenti il check la segnala come orfana.",
+  "webp": {
+    "quality": {
+      "720": 80,
+      "1440": 82
+    }
+  },
+  "screens": [
+    {
+      "id": "dashboard",
+      "landing": { "master": "landing/assets/screens/dashboard.png", "widths": [1440] },
+      "deck": { "crops": ["assets/screens/dashboard--hero.png", "assets/screens/dashboard--pane.png"] }
+    },
+    {
+      "id": "agenda",
+      "landing": { "master": "landing/assets/screens/agenda.png", "widths": [720, 1440] },
+      "deck": { "crops": ["assets/screens/agenda--band.png"] }
+    },
+    {
+      "id": "agenda-wide",
+      "landing": { "master": "landing/assets/screens/agenda-wide.png", "widths": [720, 1440] },
+      "deck": { "crops": [] }
+    },
+    {
+      "id": "cartella-clinica",
+      "landing": { "master": "landing/assets/screens/cartella-clinica.png", "widths": [1440] },
+      "deck": { "crops": ["assets/screens/cartella--band.png"] }
+    },
+    {
+      "id": "fatturazione",
+      "landing": { "master": "landing/assets/screens/fatturazione.png", "widths": [1440] },
+      "deck": { "crops": ["assets/screens/fatturazione--pane.png"] }
+    },
+    {
+      "id": "sistema-ts",
+      "landing": { "master": "landing/assets/screens/sistema-ts.png", "widths": [720, 1440] },
+      "deck": { "crops": ["assets/screens/sistema-ts--pane.png"] }
+    },
+    {
+      "id": "whatsapp",
+      "landing": { "master": "landing/assets/screens/whatsapp.png", "widths": [720, 1440] },
+      "deck": { "crops": ["assets/screens/whatsapp--pane.png"] }
+    },
+    {
+      "id": "scheda-paziente",
+      "landing": { "master": "landing/assets/screens/scheda-paziente.png", "widths": [720, 1440] },
+      "deck": { "crops": [] }
+    },
+    {
+      "id": "nuova-fattura",
+      "landing": { "master": "landing/assets/screens/nuova-fattura.png", "widths": [720, 1440] },
+      "deck": { "crops": [] }
+    },
+    {
+      "id": "mobile-agenda",
+      "landing": { "master": "landing/assets/screens/mobile-agenda.png", "widths": [720, 1440] },
+      "deck": { "crops": ["assets/screens/mobile-agenda.png"] }
+    },
+    {
+      "id": "pazienti",
+      "landing": { "master": "landing/assets/screens/pazienti.png", "widths": [] },
+      "deck": { "crops": ["assets/screens/pazienti--pane.png"] }
+    }
+  ],
+  "deckMasters": [
+    "assets/screens/agenda.png",
+    "assets/screens/agenda-wide.png",
+    "assets/screens/cartella-clinica.png",
+    "assets/screens/fatturazione.png",
+    "assets/screens/pazienti.png",
+    "assets/screens/scheda-paziente.png",
+    "assets/screens/sistema-ts.png",
+    "assets/screens/whatsapp.png"
+  ]
+}

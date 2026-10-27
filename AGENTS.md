@@ -1,3 +1,36 @@
+# StudioMS — deck e landing
+
+Due artefatti, un solo brand: un video di presentazione HyperFrames (`index.html` + `assets/`) e una landing statica a freddo (`landing/`). Il video racconta il prodotto, la landing lo vende.
+
+## Come orientarsi (leggi solo ciò che serve)
+
+| Ti serve | Leggi |
+|---|---|
+| Perché questa repo esiste, pubblico, claim vietati, lessico | `docs/positioning.md` |
+| Colori, font, regole tipografiche | `docs/brand.md` |
+| Schermate: master, WebP, ritagli del deck | `docs/assets.md` + `assets/manifest.json` |
+| Deck: contratto, comandi, warning accettati | `docs/deck.md` |
+| Landing: sezioni, form, CTA, breakpoint | `docs/landing.md` |
+| Verifiche e limiti dei test | `docs/qa.md` |
+
+## Le tre regole che costano di più se le salti
+
+1. **Le immagini vivono in due alberi** (`landing/assets/screens/` per la landing, `assets/screens/` per il deck). Cambiare un nome proprio in una schermata significa toccare master, WebP **e** ritagli del deck, poi `npm run assets && npm run qa`. Salta il lato deck e il render esce sbagliato dopo cinque minuti.
+2. **Il render del deck è sincrono.** In background con `nohup … &` muore con `render_cancelled_parent_exited`. `npm run check` non mostra come viene: guarda sempre lo `snapshot`.
+3. **Il canvas del deck è 1536×864 e non si scala.** Nessun `scale()` su un layer con testo.
+
+## Comandi
+
+```bash
+npm run assets        # coerenza immagini (esce 1 se qualcosa non torna)
+npm run assets:build  # rigenera le WebP dal master
+npm run qa            # landing nei 3 viewport + form + CTA (Playwright)
+npm run check         # deck: lint + runtime + layout + motion + contrast
+npm run render -- -o renders/studioms-deck.mp4
+```
+
+---
+
 # HyperFrames Composition Project
 
 ## Skills — read these first
