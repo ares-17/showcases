@@ -284,4 +284,17 @@
   window.addEventListener('scroll', requestSync, { passive: true });
   window.addEventListener('resize', requestSync);
   syncCta();
+
+  /* ------------------------------------------------------------ FAB (right side) */
+  var fab = document.getElementById('fab-right');
+  var fabVisible = false;
+  if (fab && demo) {
+    new IntersectionObserver(function (entries) {
+      var showing = !entries[0].isIntersecting; // show when demo is NOT in view
+      if (showing !== fabVisible) {
+        fabVisible = showing;
+        fab.style.display = showing ? 'flex' : 'none';
+      }
+    }, { threshold: 0.4 }).observe(demo);
+  }
 })();
