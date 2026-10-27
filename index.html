@@ -201,12 +201,28 @@
         width: 256px;
       }
       .dot {
+        position: relative;
         display: block;
         width: 16px;
         height: 16px;
         margin-bottom: 30px;
         border-radius: 50%;
         background: var(--accent);
+      }
+      .dot-ring {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 48px;
+        height: 48px;
+        margin: -24px 0 0 -24px;
+        border: 2px solid var(--accent);
+        border-radius: 50%;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .flow-line {
+        transform-origin: left center;
       }
       .stop-label {
         font-size: 32px;
@@ -373,6 +389,7 @@
     <section data-hf-id="hf-4t2y"
       class="slide clip"
         id="s02"
+      data-hold
       data-composition-id="s02"
       data-start="12"
       data-duration="12"
@@ -422,6 +439,7 @@
     <section data-hf-id="hf-9wu6"
       class="slide clip"
         id="s03"
+      data-hold
       data-composition-id="s03"
       data-start="24"
       data-duration="12"
@@ -436,35 +454,35 @@
           <h1 data-hf-id="hf-y74m" class="md">Tutto il flusso,<br data-hf-id="hf-sldv" />in un posto solo.</h1>
         </div>
 
-        <div data-hf-id="hf-xtgx" style="position: absolute; left: 0; top: 470px; width: 1536px; height: 2px; background: var(--line)"></div>
+        <div data-hf-id="hf-xtgx" class="flow-line" style="position: absolute; left: 0; top: 470px; width: 1536px; height: 2px; background: var(--line)"></div>
         <div data-hf-id="hf-jch3" style="position: absolute; left: 0; top: 462px; display: flex">
           <div data-hf-id="hf-wico" class="stop">
-            <span data-hf-id="hf-9gry" class="dot"></span>
+            <span data-hf-id="hf-9gry" class="dot"><span class="dot-ring"></span></span>
             <div data-hf-id="hf-a625" class="stop-label">Agenda</div>
             <div data-hf-id="hf-yzb4" class="stop-micro">conflitti bloccati</div>
           </div>
           <div data-hf-id="hf-v9wg" class="stop">
-            <span data-hf-id="hf-zcc2" class="dot"></span>
+            <span data-hf-id="hf-zcc2" class="dot"><span class="dot-ring"></span></span>
             <div data-hf-id="hf-e1en" class="stop-label">Paziente</div>
             <div data-hf-id="hf-9hbx" class="stop-micro">consenso e GDPR</div>
           </div>
           <div data-hf-id="hf-u2zd" class="stop">
-            <span data-hf-id="hf-zqn3" class="dot"></span>
+            <span data-hf-id="hf-zqn3" class="dot"><span class="dot-ring"></span></span>
             <div data-hf-id="hf-osyt" class="stop-label">Cartella</div>
             <div data-hf-id="hf-6twv" class="stop-micro">note cifrate</div>
           </div>
           <div data-hf-id="hf-uhae" class="stop">
-            <span data-hf-id="hf-04y4" class="dot"></span>
+            <span data-hf-id="hf-04y4" class="dot"><span class="dot-ring"></span></span>
             <div data-hf-id="hf-2mx6" class="stop-label">Fattura</div>
             <div data-hf-id="hf-0noh" class="stop-micro">PDF e numerazione</div>
           </div>
           <div data-hf-id="hf-tadb" class="stop">
-            <span data-hf-id="hf-0j95" class="dot"></span>
+            <span data-hf-id="hf-0j95" class="dot"><span class="dot-ring"></span></span>
             <div data-hf-id="hf-qknw" class="stop-label">Tessera sanitaria</div>
             <div data-hf-id="hf-5pt8" class="stop-micro">coda e ricevute</div>
           </div>
           <div data-hf-id="hf-tooc" class="stop">
-            <span data-hf-id="hf-0xk6" class="dot"></span>
+            <span data-hf-id="hf-0xk6" class="dot"><span class="dot-ring"></span></span>
             <div data-hf-id="hf-ssov" class="stop-label">WhatsApp</div>
             <div data-hf-id="hf-7ir7" class="stop-micro">conferme e disdette</div>
           </div>
@@ -678,6 +696,7 @@
     <section data-hf-id="hf-1sz0"
       class="slide clip"
         id="s11"
+      data-hold
       data-composition-id="s11"
       data-start="120"
       data-duration="12"
@@ -723,6 +742,7 @@
     <section data-hf-id="hf-2ogr"
       class="slide clip blue"
         id="s12"
+      data-hold
       data-composition-id="s12"
       data-start="132"
       data-duration="12"
@@ -768,6 +788,7 @@
     <section data-hf-id="hf-1m05"
       class="slide clip"
         id="s13"
+      data-hold
       data-composition-id="s13"
       data-start="144"
       data-duration="12"
@@ -807,6 +828,7 @@
     <section data-hf-id="hf-2qwr"
       class="slide clip"
         id="s14"
+      data-hold
       data-composition-id="s14"
       data-start="156"
       data-duration="12"
@@ -971,10 +993,9 @@
             start: start,
             end: start + dur,
             dur: dur,
-            items: Array.prototype.slice.call(el.querySelectorAll(".pad > *")),
-            rule: el.querySelector(".rule"),
+            cache: Object.create(null),
             hero: el.querySelector(".shot img"),
-            pad: el.querySelector(".pad"),
+            phone: el.querySelector(".phone img"),
           };
         });
         var total = scenes.reduce(function (max, s) {
@@ -985,36 +1006,311 @@
         root.to({}, { duration: total });
         window.__timelines["root"] = root;
 
-        var clamp01 = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
-        var easeOut = function (p) { return 1 - Math.pow(1 - p, 3); };
+        function clamp01(v) {
+          return v < 0 ? 0 : v > 1 ? 1 : v;
+        }
+        function outCubic(p) {
+          return 1 - Math.pow(1 - p, 3);
+        }
+        function outQuint(p) {
+          return 1 - Math.pow(1 - p, 5);
+        }
+        function outBack(p) {
+          var c1 = 1.70158;
+          var c3 = c1 + 1;
+          return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2);
+        }
+
+        function q(scene, sel) {
+          var hit = scene.cache[sel];
+          if (!hit) {
+            hit = scene.cache[sel] = Array.prototype.slice.call(scene.el.querySelectorAll(sel));
+          }
+          return hit;
+        }
+        function one(scene, sel) {
+          return q(scene, sel)[0] || null;
+        }
+
+        // Every visible value below is a pure function of the scene-local time `lt`:
+        // no tweens and no clocks, so preview, snapshot and render always agree.
+        function enter(el, lt, at, dur, opt) {
+          opt = opt || {};
+          var p = clamp01((lt - at) / (dur || 0.55));
+          if (p >= 1) {
+            if (el.__hfLanded !== 1) {
+              el.style.opacity = "1";
+              el.style.transform = "none";
+              el.style.clipPath = "none";
+              el.__hfLanded = 1;
+            }
+            return;
+          }
+          el.__hfLanded = 0;
+          var e = (opt.ease || outCubic)(p);
+          var rest = 1 - e;
+          var x = (opt.x || 0) * rest;
+          var y = (opt.y || 0) * rest;
+          var rot = (opt.rot || 0) * rest;
+          var sc = opt.s ? 1 + (opt.s - 1) * rest : 1;
+          var tf = "translate(" + x.toFixed(2) + "px," + y.toFixed(2) + "px)";
+          if (rot) tf += " rotate(" + rot.toFixed(3) + "deg)";
+          if (sc !== 1) tf += " scale(" + sc.toFixed(4) + ")";
+          el.style.opacity = opt.hold ? "1" : p.toFixed(4);
+          el.style.transform = tf;
+          if (opt.reveal) {
+            el.style.clipPath = "inset(0 0 " + (100 * (1 - outCubic(p))).toFixed(2) + "% 0)";
+          }
+        }
+
+        function pop(el, lt, at, dur, from) {
+          var p = clamp01((lt - at) / (dur || 0.45));
+          var s0 = from === undefined ? 0.4 : from;
+          if (p <= 0) {
+            el.style.opacity = "0";
+            el.style.transform = "scale(" + s0.toFixed(3) + ")";
+            return;
+          }
+          if (p >= 1) {
+            el.style.opacity = "1";
+            el.style.transform = "none";
+            return;
+          }
+          el.style.opacity = Math.min(1, p * 3).toFixed(4);
+          el.style.transform =
+            "scale(" + (1 + (s0 - 1) * (1 - outBack(p))).toFixed(4) + ")";
+        }
+
+        // scaleX from the left. `eased` for rules, linear for a drawn progress line.
+        function wipe(el, lt, at, dur, eased) {
+          var p = clamp01((lt - at) / (dur || 0.6));
+          el.style.transformOrigin = "left center";
+          el.style.transform = "scaleX(" + (eased ? outQuint(p) : p).toFixed(4) + ")";
+        }
+
+        // Shared opening beat: rule draws, eyebrow lifts, headline wipes up
+        // from behind its own box (a mask, not a fade — it reads as print, not UI).
+        // `dir` pushes the type in from the side the text column sits on.
+        function head(scene, lt, t0, dir) {
+          var dx = dir || 0;
+          var r = one(scene, ".rule");
+          if (r) wipe(r, lt, t0, 0.6, true);
+          var eb = one(scene, ".eyebrow");
+          if (eb) enter(eb, lt, t0 + 0.1, 0.5, { y: 14, x: dx * 0.5 });
+          var h = one(scene, "h1");
+          if (h) {
+            var masked = scene.id !== "s01";
+            enter(h, lt, t0 + 0.16, 0.7, {
+              y: masked ? 18 : 30,
+              x: dx,
+              reveal: masked,
+              hold: masked || scene.id === "s01",
+              ease: outQuint,
+            });
+          }
+        }
+
+        function ticks(scene, lt, t0, step) {
+          var li = q(scene, ".ticks li");
+          for (var i = 0; i < li.length; i++) {
+            enter(li[i], lt, t0 + i * (step || 0.13), 0.5, { x: -16, y: 8 });
+          }
+        }
+
+        var CHOREO = {
+          // Cover: the headline never fades (no empty first frame), it settles.
+          s01: function (s, lt) {
+            var r = one(s, ".rule");
+            if (r) wipe(r, lt, 0, 0.6, true);
+            var eb = one(s, ".eyebrow");
+            if (eb) enter(eb, lt, 0.1, 0.55, { y: 14 });
+            var h = one(s, "h1");
+            if (h) enter(h, lt, 0, 0.9, { y: 30, hold: true, ease: outQuint });
+            var sub = one(s, ".sub");
+            if (sub) enter(sub, lt, 0.4, 0.6, { y: 20 });
+            var shot = one(s, ".shot");
+            if (shot) enter(shot, lt, 0.45, 0.85, { y: 44, s: 0.985, ease: outQuint });
+            var brand = one(s, ".brand");
+            if (brand) enter(brand, lt, 1.15, 0.6, { y: 18 });
+            var foot = one(s, ".foot");
+            if (foot) enter(foot, lt, 1.25, 0.6, { y: 18 });
+          },
+
+          // Five tools land one at a time, each with its number punching in first.
+          s02: function (s, lt) {
+            head(s, lt, 0, -24);
+            var sub = one(s, ".sub");
+            if (sub) enter(sub, lt, 0.55, 0.55, { y: 18, x: -16 });
+            var foot = one(s, ".foot");
+            if (foot) enter(foot, lt, 0.72, 0.55, { y: 18 });
+            var tools = q(s, ".tool");
+            for (var i = 0; i < tools.length; i++) {
+              var at = 0.9 + i * 0.22;
+              enter(tools[i], lt, at, 0.55, { x: -36 });
+              var num = tools[i].querySelector(".mono");
+              if (num) pop(num, lt, at - 0.1, 0.45, 0.5);
+            }
+          },
+
+          // The flow line draws at constant speed and each dot punches as it arrives.
+          s03: function (s, lt) {
+            head(s, lt, 0, 0);
+            var t0 = 0.75;
+            var line = one(s, ".flow-line");
+            if (line) wipe(line, lt, t0, 1.0, false);
+            var stops = q(s, ".stop");
+            for (var i = 0; i < stops.length; i++) {
+              var at = t0 + (8 + 256 * i) / 1536;
+              enter(stops[i], lt, at, 0.5, { y: 18 });
+              var dot = stops[i].querySelector(".dot");
+              if (!dot) continue;
+              pop(dot, lt, at, 0.45, 0.3);
+              var ring = dot.querySelector(".dot-ring");
+              if (ring) {
+                var rp = clamp01((lt - at) / 0.55);
+                ring.style.opacity = rp > 0 && rp < 1 ? (0.45 * (1 - rp)).toFixed(3) : "0";
+                ring.style.transform = "scale(" + (0.7 + 1.1 * outCubic(rp)).toFixed(3) + ")";
+              }
+            }
+            var foot = one(s, ".foot");
+            if (foot) enter(foot, lt, 1.95, 0.55, { y: 14 });
+          },
+
+          s04: function (s, lt) {
+            head(s, lt, 0, -24);
+            var shot = one(s, ".shot");
+            if (shot) enter(shot, lt, 0.45, 0.8, { y: 34, s: 0.99 });
+            var sub = one(s, ".sub");
+            if (sub) enter(sub, lt, 0.5, 0.55, { y: 18, x: -16 });
+            ticks(s, lt, 1.0, 0.13);
+          },
+
+          s05: function (s, lt) {
+            head(s, lt, 0.05, 0);
+            var shot = one(s, ".shot");
+            if (shot) enter(shot, lt, 0.45, 0.9, { y: 48, s: 0.995, ease: outQuint });
+          },
+
+          s06: function (s, lt) {
+            var shot = one(s, ".shot");
+            if (shot) enter(shot, lt, 0.2, 0.85, { y: 34, s: 0.99 });
+            head(s, lt, 0.35, 24);
+            ticks(s, lt, 1.15, 0.14);
+          },
+
+          s07: function (s, lt) {
+            head(s, lt, 0.05, 0);
+            var shot = one(s, ".shot");
+            if (shot) enter(shot, lt, 0.45, 0.9, { y: 48, s: 0.995, ease: outQuint });
+          },
+
+          s08: function (s, lt) {
+            head(s, lt, 0, -24);
+            var shot = one(s, ".shot");
+            if (shot) enter(shot, lt, 0.4, 0.8, { y: 34, s: 0.99 });
+            var sub = one(s, ".sub");
+            if (sub) enter(sub, lt, 0.5, 0.55, { y: 18, x: -16 });
+            ticks(s, lt, 1.0, 0.13);
+          },
+
+          s09: function (s, lt) {
+            var shot = one(s, ".shot");
+            if (shot) enter(shot, lt, 0.2, 0.85, { y: 34, s: 0.99 });
+            head(s, lt, 0.3, 24);
+            ticks(s, lt, 1.1, 0.13);
+          },
+
+          s10: function (s, lt) {
+            head(s, lt, 0, -24);
+            var shot = one(s, ".shot");
+            if (shot) enter(shot, lt, 0.4, 0.8, { y: 34, s: 0.99 });
+            var sub = one(s, ".sub");
+            if (sub) enter(sub, lt, 0.52, 0.55, { y: 18, x: -16 });
+            var chips = q(s, ".chip");
+            for (var i = 0; i < chips.length; i++) {
+              pop(chips[i], lt, 1.0 + i * 0.15, 0.5, 0.86);
+            }
+          },
+
+          s11: function (s, lt) {
+            head(s, lt, 0, 0);
+            var panels = q(s, ".panel");
+            for (var i = 0; i < panels.length; i++) {
+              enter(panels[i], lt, 0.8 + i * 0.16, 0.6, { y: 28, s: 0.99 });
+            }
+            var foot = one(s, ".foot");
+            if (foot) enter(foot, lt, 1.85, 0.55, { y: 14 });
+          },
+
+          s12: function (s, lt) {
+            head(s, lt, 0, 0);
+            var lead = one(s, ".lead");
+            if (lead) enter(lead, lt, 0.5, 0.6, { y: 18 });
+            var trust = q(s, ".trust");
+            for (var i = 0; i < trust.length; i++) {
+              enter(trust[i], lt, 0.95 + i * 0.16, 0.58, { y: 24 });
+            }
+          },
+
+          s13: function (s, lt) {
+            head(s, lt, 0, 0);
+            var arch = q(s, ".arch");
+            for (var i = 0; i < arch.length; i++) {
+              enter(arch[i], lt, 0.75 + i * 0.17, 0.6, { y: 30, s: 0.99 });
+            }
+            var foot = one(s, ".foot");
+            if (foot) enter(foot, lt, 1.8, 0.55, { y: 14 });
+          },
+
+          // Three horizons fill left to right, each list item one after the other.
+          s14: function (s, lt) {
+            head(s, lt, 0, 0);
+            var cols = q(s, ".horizon");
+            for (var i = 0; i < cols.length; i++) {
+              var at = 0.7 + i * 0.22;
+              var k = cols[i].querySelector(".h-k");
+              if (k) enter(k, lt, at, 0.5, { y: 14 });
+              var items = cols[i].querySelectorAll(".h-list li");
+              for (var j = 0; j < items.length; j++) {
+                enter(items[j], lt, at + 0.14 + j * 0.09, 0.45, { x: -14, y: 8 });
+              }
+            }
+            var foot = one(s, ".foot");
+            if (foot) enter(foot, lt, 2.05, 0.55, { y: 14 });
+          },
+
+          s15: function (s, lt) {
+            head(s, lt, 0, -24);
+            var sub = one(s, ".sub");
+            if (sub) enter(sub, lt, 0.5, 0.6, { y: 20, x: -16 });
+            var phone = one(s, ".phone");
+            if (phone) {
+              enter(phone, lt, 0.5, 1.0, { y: 64, s: 0.96, rot: -1.2, ease: outQuint });
+            }
+            var brand = one(s, ".brand");
+            if (brand) enter(brand, lt, 1.15, 0.6, { y: 18 });
+            var foot = one(s, ".foot");
+            if (foot) enter(foot, lt, 1.3, 0.6, { y: 18 });
+          },
+        };
+
+        // Screenshots get the only ambient move: a pull-back that settles, then a
+        // long push-in. Text layers are never scaled — scaling resamples the type
+        // and softens it, which shows as a blur next to un-scaled siblings.
+        function ambient(scene, lt) {
+          var media = scene.hero || scene.phone;
+          if (!media) return;
+          var ph = clamp01(lt / scene.dur);
+          var settle = outQuint(clamp01(lt / 1.5));
+          media.style.transformOrigin = "50% 50%";
+          media.style.transform =
+            "scale(" + (1.055 - 0.055 * settle + 0.03 * ph).toFixed(4) + ")";
+        }
 
         function paint(scene, lt) {
-          var i, item, p, delay;
-          for (i = 0; i < scene.items.length; i++) {
-            item = scene.items[i];
-            if (scene.id === "s01" && i === 0) {
-              item.style.opacity = "1";
-              item.style.transform = "none";
-              continue;
-            }
-            delay = scene.id === "s01" ? 0.45 + i * 0.16 : i * 0.08;
-            p = clamp01((lt - delay) / 0.5);
-            item.style.opacity = p.toFixed(4);
-            item.style.transform =
-              p >= 1 ? "none" : "translateY(" + (22 * (1 - easeOut(p))).toFixed(2) + "px)";
-          }
-          if (scene.rule) {
-            var pr = scene.id === "s01" ? 1 : easeOut(clamp01(lt / 0.5));
-            scene.rule.style.transformOrigin = "left center";
-            scene.rule.style.transform = "scaleX(" + pr.toFixed(4) + ")";
-          }
-          var ph = clamp01(lt / scene.dur);
-          if (scene.hero) {
-            scene.hero.style.transform = "scale(" + (1 + 0.035 * ph).toFixed(4) + ")";
-          } else if (scene.pad) {
-            scene.pad.style.transformOrigin = "50% 46%";
-            scene.pad.style.transform = "scale(" + (1 + 0.018 * ph).toFixed(4) + ")";
-          }
+          var fn = CHOREO[scene.id];
+          if (fn) fn(scene, lt);
+          ambient(scene, lt);
         }
 
         function update(t) {
