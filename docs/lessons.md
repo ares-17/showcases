@@ -18,17 +18,13 @@ Ho corretto un nome proprio nelle schermate della landing, ho cancellato quelle 
 
 Il render stampa "Sub-composition timelines did not become ready within 45000ms (still unregistered: s01…s15)" anche quando **riesce**: le scene sono guidate da CSS/rAF e registrano la timeline a valle. Non aggiungere `data-no-timeline` per far sparire il messaggio: rompe il deck.
 
-## 4. Un `[hidden]` perde contro un `display: block`
+## 4. `position` e `display` non si duplicano tra contenitore e componente
 
-La CTA mobile usa l'attributo `hidden`, ma nel media query c'era `display: block`: la regola dell'attributo non ha la stessa specificità e il bottone restava visibile. Serve una regola globale:
-
-```css
-.mobile-cta[hidden] { display: none !important; }
-```
+Il FAB aveva `.fab-right { position: fixed; display: none }`, ma `.fab-btn { position: relative; display: flex }`: la seconda regola vinceva e il FAB finiva in fondo al documento, visibile anche su mobile. Il `[hidden]` da solo non basta se una regola successiva impone `display`. Difesa: una sola regola per `position`/`display` per lo stesso elemento e verifica con `getComputedStyle` + `getBoundingClientRect`, non solo con l'attributo.
 
 ## 5. `scroll-behavior: smooth` falsa i test a tempo
 
-Uno script che misura "la CTA è nascosta in cima alla pagina" dopo `scrollTo(0,0)` può misurare **durante** lo scroll animato e riportare il contrario. Nei test: disattivare lo smooth (`html { scroll-behavior: auto !important }`) e attendere `scrollY === 0`.
+Uno script che misura "il FAB è nascosto dentro `#demo`" dopo uno `scrollIntoView` può misurare **durante** lo scroll animato e riportare il contrario. Nei test: disattivare lo smooth (`html { scroll-behavior: auto !important }`) e attendere `scrollY === 0`.
 
 ## 6. I nomi propri stanno nei pixel
 

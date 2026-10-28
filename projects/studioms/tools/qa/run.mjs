@@ -4,9 +4,9 @@
  *
  *   node tools/qa/run.mjs
  *
- * Apre landing/index.html su 1440, 390 e 320 px, controlla overflow,
- * console, richieste fallite, immagini rotte, comportamento del form e
- * della CTA mobile. Salva gli screenshot in .qa/.
+ * Apre landing/index.html su 1440, 390, 375 e 320 px, controlla overflow,
+ * console, richieste fallite, immagini rotte, hero sopra la piega,
+ * FAB desktop e comportamento del form. Salva gli screenshot in .qa/.
  *
  * Playwright viene cercato in: questo repo, $PLAYWRIGHT_DIR, poi
  * un'installazione sorella del workspace: ../../../osteopacity/frontend/node_modules
@@ -115,6 +115,7 @@ async function run() {
     for (const [label, viewport] of [
       ['desktop 1440', { width: 1440, height: 900 }],
       ['mobile 390', { width: 390, height: 844 }],
+      ['mobile 375', { width: 375, height: 667 }],
       ['mobile 320', { width: 320, height: 568 }],
     ]) {
       const page = await browser.newPage({ viewport });
@@ -129,7 +130,56 @@ async function run() {
       await settle(page);
       await pageHealth(page, label);
 
+      await page.screenshot({ path: join(SHOTS, `${label.replace(/\s+/g, '-')}.png`), fullPage: false });
+
       if (label === 'desktop 1440') {
+        const hero = await page.evaluate(() => {
+          const box = (sel) => {
+            const el = document.querySelector(sel);
+            if (!el) return null;
+            const r = el.getBoundingClientRect();
+            return {
+              top: Math.round(r.top),
+              bottom: Math.round(r.bottom),
+              left: Math.round(r.left),
+              right: Math.round(r.right),
+              display: getComputedStyle(el).display,
+            };
+          };
+          const h1 = document.querySelector('.hero h1');
+          const h1Style = getComputedStyle(h1);
+          const fab = document.getElementById('fab-right');
+          return {
+            copy: box('.hero-copy'),
+            desktop: box('.hero-desktop'),
+            phone: box('.hero-phone'),
+            fab: box('#fab-right'),
+            h1Lines: Math.round(h1.getBoundingClientRect().height / parseFloat(h1Style.lineHeight)),
+            fabTag: fab?.tagName,
+            fabHref: fab?.getAttribute('href'),
+            fabPosition: fab ? getComputedStyle(fab).position : null,
+          };
+        });
+        if (!hero.desktop || hero.desktop.display === 'none') fail('desktop: screenshot hero nascosto');
+        if (hero.desktop && hero.desktop.bottom > 900) fail(`desktop: screenshot hero sotto la piega (${hero.desktop.bottom}px)`);
+        if (hero.copy && hero.desktop && hero.copy.right > hero.desktop.left + 1) fail(`desktop: copy e screenshot si sovrappongono (${hero.copy.right} > ${hero.desktop.left})`);
+        if (hero.phone && hero.phone.bottom > 900) fail(`desktop: telefono hero sotto la piega (${hero.phone.bottom}px)`);
+        if (hero.h1Lines > 3) fail(`desktop: H1 su ${hero.h1Lines} righe (max 3)`);
+        if (hero.fabTag !== 'A' || hero.fabHref !== '#demo') fail(`desktop: FAB non è un link a #demo (${hero.fabTag}, ${hero.fabHref})`);
+        if (hero.fabPosition !== 'fixed') fail(`desktop: FAB non è fixed (${hero.fabPosition})`);
+        if (!hero.fab || hero.fab.display === 'none') fail('desktop: FAB nascosto');
+        if (hero.fab && (hero.fab.bottom > 900 || hero.fab.right > 1440)) fail('desktop: FAB fuori viewport');
+
+        await page.click('#fab-right');
+        await page.waitForTimeout(700);
+        const fabAfter = await page.evaluate(() => {
+          const fab = document.getElementById('fab-right');
+          return { hash: location.hash, hidden: fab.hidden, display: getComputedStyle(fab).display };
+        });
+        if (fabAfter.hash !== '#demo') fail(`desktop: il FAB non porta a #demo (${fabAfter.hash})`);
+        if (!fabAfter.hidden) fail('desktop: il FAB resta visibile dentro #demo');
+        if (fabAfter.display !== 'none') fail(`desktop: FAB con hidden ma display:${fabAfter.display} dentro #demo`);
+
         // form vuoto → cinque errori sui campi obbligatori
         await page.locator('#demo-form').scrollIntoViewIfNeeded();
         await page.click('#demo-form button[type="submit"]');
@@ -151,34 +201,49 @@ async function run() {
         if (!link?.startsWith('https://wa.me/')) fail(`form valido: link inatteso (${link})`);
         else if (!decodeURIComponent(link).includes('Studio Bianchi')) fail('form valido: il messaggio non contiene lo studio');
         await page.screenshot({ path: join(SHOTS, 'form-result.png'), fullPage: false });
-      }
-
-      if (label.startsWith('mobile')) {
-        const ctaState = () => page.evaluate(() => {
-          const el = document.getElementById('mobile-cta');
-          return { hidden: el.hidden, display: getComputedStyle(el).display };
+      } else {
+        const mobile = await page.evaluate(() => {
+          const box = (sel) => {
+            const el = document.querySelector(sel);
+            if (!el) return null;
+            const r = el.getBoundingClientRect();
+            return {
+              top: Math.round(r.top),
+              bottom: Math.round(r.bottom),
+              left: Math.round(r.left),
+              right: Math.round(r.right),
+              display: getComputedStyle(el).display,
+            };
+          };
+          const display = (sel) => {
+            const el = document.querySelector(sel);
+            return el ? getComputedStyle(el).display : null;
+          };
+          return {
+            copy: box('.hero-copy'),
+            phone: box('.hero-phone'),
+            h1: display('.hero h1'),
+            primary: display('.hero .btn-row .btn-primary'),
+            fab: display('#fab-right'),
+            mobileCta: !!document.getElementById('mobile-cta'),
+            hidden: {
+              eyebrow: display('.hero .eyebrow'),
+              sub: display('.hero-sub'),
+              micro: display('.hero .micro-row'),
+              ghost: display('.hero .btn-row .btn-ghost'),
+              caption: display('.hero-media figcaption'),
+            },
+          };
         });
-        const atTop = await ctaState();
-        if (!atTop.hidden) fail(`${label}: la CTA mobile è visibile sopra la piega`);
-        if (atTop.display !== 'none') fail(`${label}: la CTA mobile ha hidden ma resta display:${atTop.display} sopra la piega`);
-        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight * 0.5));
-        await page.waitForTimeout(250);
-        const mid = await ctaState();
-        if (mid.hidden) fail(`${label}: la CTA mobile non compare a metà pagina`);
-        if (mid.display === 'none') fail(`${label}: la CTA mobile resta nascosta a metà pagina`);
-      }
-
-      await page.screenshot({ path: join(SHOTS, `${label.replace(/\s+/g, '-')}.png`), fullPage: false });
-
-      if (label.startsWith('mobile')) {
-        await page.evaluate(() => document.getElementById('demo').scrollIntoView({ block: 'start' }));
-        await page.waitForTimeout(400);
-        const inDemo = await page.evaluate(() => {
-          const el = document.getElementById('mobile-cta');
-          return { hidden: el.hidden, display: getComputedStyle(el).display };
-        });
-        if (!inDemo.hidden) fail(`${label}: la CTA mobile resta visibile dentro #demo`);
-        if (inDemo.display !== 'none') fail(`${label}: la CTA mobile ha hidden ma resta display:${inDemo.display} dentro #demo`);
+        if (mobile.mobileCta) fail(`${label}: #mobile-cta è ancora nel DOM`);
+        if (mobile.fab !== 'none') fail(`${label}: FAB visibile su mobile (${mobile.fab})`);
+        for (const [name, value] of Object.entries(mobile.hidden)) {
+          if (value !== 'none') fail(`${label}: ${name} hero ancora visibile (${value})`);
+        }
+        if (mobile.h1 === 'none' || mobile.primary === 'none') fail(`${label}: H1 o CTA primaria nascosti`);
+        if (!mobile.phone || mobile.phone.display === 'none') fail(`${label}: telefono hero nascosto`);
+        if (mobile.phone && mobile.phone.bottom > viewport.height) fail(`${label}: telefono sotto la piega (${mobile.phone.bottom} > ${viewport.height})`);
+        if (mobile.copy && mobile.copy.bottom > viewport.height) fail(`${label}: copy hero sotto la piega (${mobile.copy.bottom} > ${viewport.height})`);
       }
 
       await page.close();
@@ -198,7 +263,7 @@ async function run() {
     for (const f of failures) console.log(`  ✗ ${f}`);
     process.exit(1);
   }
-  console.log('\n✓ landing a posto (3 viewport, form, CTA)\n');
+  console.log('\n✓ landing a posto (4 viewport, hero, FAB, form)\n');
 }
 
 run().catch((err) => {

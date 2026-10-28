@@ -53,7 +53,7 @@ Regole: nessun backend, un solo canale di contatto (WhatsApp o email, deciso una
 | Cosa | Comando | Tempo reale |
 |---|---|---|
 | Immagini coerenti | `npm run assets` | 1 s |
-| Landing nei 3 viewport + form + CTA | `npm run qa` | 20–40 s |
+| Landing nei 4 viewport + form + hero/FAB | `npm run qa` | 20–40 s |
 | Video: lint/runtime/layout/motion/contrast | `npm run check` | 30–60 s |
 | Frame del video | `snapshot --at N` | 5 s per frame |
 | Render completo | `render -- -o …` | 5 min (3 min di video) |

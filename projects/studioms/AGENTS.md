@@ -24,7 +24,7 @@ Due artefatti, un solo brand: un video di presentazione HyperFrames (`index.html
 ```bash
 npm run assets        # coerenza immagini (esce 1 se qualcosa non torna)
 npm run assets:build  # rigenera le WebP dal master
-npm run qa            # landing nei 3 viewport + form + CTA (Playwright)
+npm run qa            # landing nei 4 viewport + form + hero/FAB (Playwright)
 npm run check         # deck: lint + runtime + layout + motion + contrast
 npm run render -- -o renders/studioms-deck.mp4
 ```

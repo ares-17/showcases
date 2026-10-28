@@ -4,13 +4,13 @@ Due comandi coprono il 90% dei casi. Girano in locale, senza CI.
 
 ```bash
 npm run assets   # coerenza immagini (riferimenti, orfani, manifest)
-npm run qa       # landing nei 3 viewport + form + CTA (Playwright)
+npm run qa       # landing nei 4 viewport + form + hero/FAB (Playwright)
 npm run check    # deck: HyperFrames lint/runtime/layout/motion/contrast
 ```
 
 ## `npm run qa` — `tools/qa/run.mjs`
 
-Apre `landing/index.html` servito da un server statico interno su 1440×900, 390×844, 320×568.
+Apre `landing/index.html` servito da un server statico interno su 1440×900, 390×844, 375×667, 320×568.
 
 Verifica:
 
@@ -21,9 +21,12 @@ Verifica:
 | Console / rete | `pageerror`, `console.error`, risposta ≥ 400, richiesta fallita |
 | Form vuoto | i campi in `.field.has-error` non sono 5 |
 | Form valido | `#result` non visibile, o `#wa-link` non è `https://wa.me/…` con lo studio nel testo |
-| CTA mobile | visibile sopra la piega, o assente a metà pagina |
+| Hero desktop | screenshot sotto la piega, copy/media sovrapposti, H1 su più di 3 righe |
+| Hero mobile | eyebrow/sub/micro/CTA secondaria/figcaption visibili, telefono sotto la piega a 390×844, 375×667 o 320×568 |
+| FAB | non è `<a href="#demo">`, non è `fixed`, è visibile su mobile, o non si nasconde dentro `#demo` |
+| Bottom bar | `#mobile-cta` è ancora nel DOM |
 
-Screenshot in `.qa/` (ignorata da git): `desktop-1440.png`, `mobile-390.png`, `mobile-320.png`, `form-result.png`.
+Screenshot in `.qa/` (ignorata da git): `desktop-1440.png`, `mobile-390.png`, `mobile-375.png`, `mobile-320.png`, `form-result.png`.
 
 **Playwright** non è una dipendenza di questa repo. Lo script lo cerca in: repo, `$PLAYWRIGHT_DIR`, `../../../osteopacity/frontend/node_modules` (installazione già presente sulla macchina). Se manca:
 
@@ -33,7 +36,7 @@ npm i -D playwright && npx playwright install chromium
 PLAYWRIGHT_DIR=/percorso/node_modules node tools/qa/run.mjs
 ```
 
-Nota: il CSS ha `scroll-behavior: smooth`; lo script lo disattiva prima di misurare, altrimenti la CTA mobile risulta visibile mentre la pagina sta ancora tornando in cima.
+Nota: il CSS ha `scroll-behavior: smooth`; lo script lo disattiva prima di misurare, altrimenti il FAB può risultare visibile mentre la pagina sta ancora tornando in cima.
 
 ## Cosa non copre
 

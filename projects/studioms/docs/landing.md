@@ -8,7 +8,7 @@ HTML, CSS e JS puri. Nessun build step, nessuna dipendenza, nessuna richiesta di
 |---|---|
 | `landing/index.html` | tutte le sezioni, JSON-LD, form |
 | `landing/css/styles.css` | token (`:root`), layout, breakpoint |
-| `landing/js/app.js` | form, calcolatore, CTA mobile |
+| `landing/js/app.js` | form, calcolatore, FAB |
 | `landing/privacy.html` | bozza informativa, `noindex` |
 | `landing/README.md` | istruzioni d'uso e segnaposto aperti |
 
@@ -16,7 +16,7 @@ HTML, CSS e JS puri. Nessun build step, nessuna dipendenza, nessuna richiesta di
 
 `hero` (banda scura) → `#problema` (banda scura, con calcolatore) → `#come-funziona` → `#moduli` → `#whatsapp` (banda scura) → `#prezzi` → `#dati` → `#domande` → `#demo` (banda scura, form) → footer.
 
-La hero è centrata su fondo `--band`, con screenshot `agenda-wide` e telefono in sovrapposizione. La gallery a tab è stata rimossa: le schermate vivono solo nelle righe di `#moduli`, con immagine inline. La sezione demo usa lo stesso fondo scuro della hero, con card form bianca.
+La hero è split su desktop (≥961px): copy a sinistra, screenshot `agenda-wide` a destra, telefono in sovrapposizione. Sotto 961px torna centrata; sotto 640px restano solo H1, CTA primaria e telefono. La gallery a tab è stata rimossa: le schermate vivono solo nelle righe di `#moduli`, con immagine inline. La sezione demo usa lo stesso fondo scuro della hero, con card form bianca.
 
 ## Calcolatore
 
@@ -36,17 +36,27 @@ Nessun backend. Il submit costruisce un messaggio e apre `wa.me`.
 - Esito: `#result` con `#result-text`, `#wa-link`, `#copy-btn`.
 - **Numero**: `landing/index.html`, `<body data-wa-number="">`, solo cifre senza `+`. Vuoto → `https://wa.me/?text=…` e il visitatore sceglie il contatto. È l'unico punto da toccare.
 
-## CTA mobile
+## Hero
 
-`#mobile-cta`. Visibile solo sotto 640px (`display: none` sopra), compare quando `scrollY > 0.65 × altezza hero` e la sezione `#demo` non è in vista. Usa l'attributo `hidden`, quindi il CSS ha bisogno di `.mobile-cta[hidden] { display: none !important }`: senza, la regola `display: block` del media query lo vince. Il QA controlla anche il `display` calcolato, non solo l'attributo. `body` ha `padding-bottom: 84px` per non coprire il footer.
+- ≥961px: griglia a due colonne (copy ~55%, media ~45%), copy allineata a sinistra, H1 max 3 righe, screenshot intero sopra la piega a 1440×900.
+- 641–960px: hero centrata, copy completa, screenshot a piena larghezza.
+- ≤640px: solo `h1`, CTA primaria e `.hero-phone`; eyebrow, sub, micro-row, CTA secondaria e figcaption nascosti. Il telefono resta sopra la piega a 390×844, 375×667 e 320×568.
+- Le immagini hanno `sizes` allineati al layout: desktop ~46vw, mobile ~92vw; telefono ~12vw desktop, ~54vw mobile.
+
+## FAB
+
+`#fab-right` è un `<a href="#demo">` fisso in basso a destra, visibile da 641px in su e nascosto su mobile. Un `IntersectionObserver` imposta `hidden` quando `#demo` è in vista. Il CSS ha `.fab-right[hidden] { display: none !important }` perché la regola del media query (`display: block`) vincerebbe l'attributo. Non esiste più la bottom bar mobile: niente `#mobile-cta`, niente padding-bottom sul body.
 
 ## Breakpoint
 
 | Soglia | Cosa cambia |
 |---|---|
 | 1080 | gutter ridotto |
-| 960 | griglie a due colonne → una; hero con screenshot a piena larghezza |
-| 640 | header compatto, hero con solo telefono, CTA mobile, tutto a colonna singola |
+| 961 | hero passa a due colonne |
+| 960 | griglie a due colonne → una; hero torna centrata a piena larghezza |
+| 640 | header compatto, hero compatta (H1 + CTA + telefono), FAB nascosto, tutto a colonna singola |
+| ≤640 e altezza ≤720 | hero più compatta: H1 36px, telefono 48% |
+| ≤640 e altezza ≤600 | H1 32px, telefono 42% |
 | `prefers-reduced-motion` | animazioni, reveal e count-up disattivati |
 
 Sui fondi scuri il testo secondario non scende sotto `rgba(249, 249, 255, 0.6)`: a 0.45 le note da 11–12px non passano il contrasto AA.

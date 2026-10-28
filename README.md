@@ -47,7 +47,7 @@ Stato attuale: un solo progetto, `projects/studioms/` (primo caso: gestionale pe
 
 ```bash
 npm run assets        # coerenza immagini
-npm run qa            # landing nei 3 viewport, form, CTA
+npm run qa            # landing nei 4 viewport, hero/FAB, form
 npm run check         # lint/runtime/layout/motion/contrast del video
 npm run render -- -o renders/<slug>-deck.mp4
 ```

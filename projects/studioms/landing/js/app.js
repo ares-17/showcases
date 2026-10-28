@@ -258,48 +258,12 @@
     });
   }
 
-  /* ------------------------------------------------------------ sticky cta */
-  var cta = document.getElementById('mobile-cta');
-  var hero = document.querySelector('.hero');
-  var demo = document.getElementById('demo');
-  var demoVisible = false;
-  var ticking = false;
-
-  function syncCta() {
-    ticking = false;
-    if (!cta) { return; }
-    var pastHero = hero ? window.scrollY > hero.offsetHeight * 0.65 : window.scrollY > 600;
-    cta.hidden = !(pastHero && !demoVisible);
-  }
-
-  function requestSync() {
-    if (!ticking) {
-      ticking = true;
-      window.requestAnimationFrame(syncCta);
-    }
-  }
-
-  if (cta && 'IntersectionObserver' in window && demo) {
-    new IntersectionObserver(function (entries) {
-      demoVisible = entries[0].isIntersecting;
-      requestSync();
-    }, { threshold: 0.12 }).observe(demo);
-  }
-
-  window.addEventListener('scroll', requestSync, { passive: true });
-  window.addEventListener('resize', requestSync);
-  syncCta();
-
   /* ------------------------------------------------------------ FAB (right side) */
+  var demo = document.getElementById('demo');
   var fab = document.getElementById('fab-right');
-  var fabVisible = false;
-  if (fab && demo) {
+  if (fab && demo && 'IntersectionObserver' in window) {
     new IntersectionObserver(function (entries) {
-      var showing = !entries[0].isIntersecting; // show when demo is NOT in view
-      if (showing !== fabVisible) {
-        fabVisible = showing;
-        fab.style.display = showing ? 'flex' : 'none';
-      }
+      fab.hidden = entries[0].isIntersecting; // hide when the demo is in view
     }, { threshold: 0.4 }).observe(demo);
   }
 })();
