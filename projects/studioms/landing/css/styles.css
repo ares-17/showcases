@@ -26,6 +26,8 @@
   --brand-deep: #001945;
   --band: #0a1730;
   --error: #ba1a1a;
+  --wa: #25D366;
+  --wa-hover: #128C7E;
   --container: 1200px;
   --gutter: 24px;
   --header-h: 68px;
@@ -181,13 +183,13 @@ button { font: inherit; }
 
 /* WhatsApp-style green button variant */
 .btn-wa {
-  background: #25D366;
-  border-color: #25D366;
+  background: var(--wa);
+  border-color: var(--wa);
   box-shadow: 0 2px 8px rgba(37, 211, 102, 0.2);
 }
 .btn-wa:hover {
-  background: #128C7E;
-  border-color: #128C7E;
+  background: var(--wa-hover);
+  border-color: var(--wa-hover);
   box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
 }
 .btn-wa .arrow { transition: transform 0.18s var(--ease); }
@@ -1271,9 +1273,9 @@ form .btn-block { margin-top: 8px; }
   height: 56px;
   border-radius: 50%;
   border: none;
-  background: var(--brand);
+  background: var(--wa);
   color: #fff;
-  box-shadow: 0 6px 16px rgba(27, 68, 138, 0.35), 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.35), 0 2px 6px rgba(0,0,0,0.1);
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -1282,24 +1284,26 @@ form .btn-block { margin-top: 8px; }
   -webkit-tap-highlight-color: transparent;
 }
 .fab-btn:hover {
-  background: var(--brand-hover);
+  background: var(--wa-hover);
   color: #fff;
   transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(27, 68, 138, 0.5), 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 12px 24px rgba(37, 211, 102, 0.45), 0 4px 12px rgba(0,0,0,0.15);
 }
 .fab-btn:active {
   transform: translateY(0) scale(0.97);
-  box-shadow: 0 4px 10px rgba(27, 68, 138, 0.4);
+  box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4);
 }
 .fab-btn:focus-visible {
-  outline: 3px solid var(--brand);
+  outline: 3px solid var(--wa);
   outline-offset: 3px;
 }
 .fab-btn svg {
   width: 24px;
   height: 24px;
   stroke: currentColor;
-  stroke-width: 2.2;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   fill: none;
 }
 
