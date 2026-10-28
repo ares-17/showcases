@@ -28,6 +28,7 @@
   --error: #ba1a1a;
   --container: 1200px;
   --gutter: 24px;
+  --header-h: 68px;
   --radius: 10px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -213,20 +214,29 @@ button { font: inherit; }
 .btn-block { width: 100%; }
 
 /* ---------------------------------------------------------------- header */
+/* In cima l'header non ha fondo: la banda scura della hero passa sotto.
+   Dopo lo scroll diventa carta semi-opaca + blur, abbastanza da leggere
+   i link ma da lasciar intravedere il contenuto. */
 .site-header {
-  position: sticky;
-  top: 0;
+  position: fixed;
+  inset: 0 0 auto;
   z-index: 60;
+  height: var(--header-h);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.22s var(--ease), border-color 0.22s var(--ease);
+}
+.site-header[data-scrolled="true"] {
   background: rgba(249, 249, 255, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--line-soft);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border-bottom-color: var(--line-soft);
 }
 .header-inner {
   display: flex;
   align-items: center;
   gap: 32px;
-  height: 68px;
+  height: 100%;
 }
 .brand {
   display: inline-flex;
@@ -249,9 +259,45 @@ button { font: inherit; }
 .site-nav a { color: var(--muted); }
 .site-nav a:hover { color: var(--ink); }
 
+/* Header sopra la banda scura: testo chiaro, CTA in brand-soft. */
+.site-header .brand,
+.site-header .brand:hover { color: var(--paper); }
+.site-header .site-nav a { color: rgba(249, 249, 255, 0.74); }
+.site-header .site-nav a:hover { color: var(--paper); }
+.site-header .btn-primary {
+  background: var(--brand-soft);
+  border-color: var(--brand-soft);
+  color: var(--brand-deep);
+}
+.site-header .btn-primary:hover {
+  background: var(--card);
+  border-color: var(--card);
+  color: var(--brand-deep);
+}
+.site-header :focus-visible { outline-color: var(--brand-soft); }
+
+/* Dopo lo scroll torna la versione su carta. */
+.site-header[data-scrolled="true"] .brand,
+.site-header[data-scrolled="true"] .brand:hover { color: var(--ink); }
+.site-header[data-scrolled="true"] .site-nav a { color: var(--muted); }
+.site-header[data-scrolled="true"] .site-nav a:hover { color: var(--ink); }
+.site-header[data-scrolled="true"] .btn-primary {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+.site-header[data-scrolled="true"] .btn-primary:hover {
+  background: var(--brand-hover);
+  border-color: var(--brand-hover);
+  color: #fff;
+}
+.site-header[data-scrolled="true"] :focus-visible { outline-color: var(--brand); }
+
 /* ---------------------------------------------------------------- hero */
 .hero {
-  padding-block: clamp(56px, 7vw, 96px) clamp(64px, 8vw, 112px);
+  --hero-top: clamp(40px, 6vw, 88px);
+  padding-top: calc(var(--header-h) + var(--hero-top));
+  padding-bottom: clamp(64px, 8vw, 112px);
   background:
     radial-gradient(70% 60% at 50% -10%, rgba(27, 68, 138, 0.55) 0%, transparent 70%),
     var(--band);
@@ -407,23 +453,22 @@ button { font: inherit; }
 
 /* ---------------------------------------------------------------- 01 sintomi (problemi) */
 #problema {
-background-color: var(--band);
-background-image: radial-gradient(circle at top right, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
-border-top: 1px solid rgba(249, 249, 255, 0.1);
+background-color: var(--brand-soft);
+border-top: 0;
 }
 
-#problema .eyebrow { color: var(--brand-soft); }
-#problema .eyebrow span { color: rgba(249, 249, 255, 0.6); }
-#problema .section-head h2 { color: var(--paper); }
-#problema .lead { color: rgba(249, 249, 255, 0.72); }
+#problema .eyebrow { color: var(--error); }
+#problema .eyebrow span { color: var(--muted); }
+#problema .section-head h2 { color: var(--ink); }
+#problema .lead { color: var(--muted); }
 
 .pain-grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 1px; /* Gap minimo: le card sembrano giunture di un sistema rigido */
   margin-top: 52px;
-  background: rgba(249, 249, 255, 0.1); /* Linee sottili che separano le card */
-  border: 1px solid rgba(249, 249, 255, 0.1);
+  background: rgba(0, 25, 69, 0.16); /* Linee sottili che separano le card */
+  border: 1px solid rgba(0, 25, 69, 0.16);
 }
 
 .pain {
@@ -432,7 +477,7 @@ border-top: 1px solid rgba(249, 249, 255, 0.1);
   display: flex;
   flex-direction: column;
   padding: 32px 28px;
-  background: var(--band); /* Sfondo solido per staccare dalle linee */
+  background: var(--card); /* Sfondo solido per staccare dalle linee */
   border: none;
   border-radius: 0; /* NIENTE ANGOLI STONDATI */
   transition: background-color 0.3s var(--ease);
@@ -440,7 +485,7 @@ border-top: 1px solid rgba(249, 249, 255, 0.1);
 }
 
 .pain:hover {
-  background: #0f1f3d; /* Leggero schiarimento all'hover */
+  background: #eef2ff; /* Leggero schiarimento all'hover */
 }
 
 .pain:nth-child(n + 4) {
@@ -457,8 +502,8 @@ border-top: 1px solid rgba(249, 249, 255, 0.1);
   font-family: var(--label);
   font-size: 13px;
   font-weight: 800;
-  color: var(--band);
-  background: #fbbf24;
+  color: #fff;
+  background: var(--error);
   border-radius: 0; /* Spigolo vivo */
   margin-bottom: 20px;
 }
@@ -469,13 +514,13 @@ border-top: 1px solid rgba(249, 249, 255, 0.1);
   font-weight: 700;
   letter-spacing: -0.015em;
   line-height: 1.25;
-  color: var(--paper);
+  color: var(--ink);
 }
 
 .pain p {
   margin-top: 12px;
   max-width: 36ch;
-  color: rgba(249, 249, 255, 0.7);
+  color: var(--muted);
   font-size: 15.5px;
   line-height: 1.55;
 }
@@ -487,7 +532,7 @@ border-top: 1px solid rgba(249, 249, 255, 0.1);
   font-weight: 500; /* Peso medio, non grassetto */
   line-height: 1.5;
   letter-spacing: 0; /* Rimosso il tracking stretto da titolo */
-  color: rgba(249, 249, 255, 0.8); /* Bianco leggermente attenuato */
+  color: var(--muted);
   padding-left: 0; /* Rimosso il padding */
   border-left: none; /* Rimosso il bordo giallo */
   text-wrap: balance;
@@ -501,8 +546,8 @@ border-top: 1px solid rgba(249, 249, 255, 0.1);
   margin-top: 40px;
   padding: clamp(24px, 4vw, 40px);
   border-radius: var(--radius);
-  background: var(--brand-soft);
-  color: var(--brand-deep);
+  background: var(--brand-deep);
+  color: var(--paper);
 }
 .calc-copy { align-self: start; }
 .calc-kicker {
@@ -511,10 +556,11 @@ border-top: 1px solid rgba(249, 249, 255, 0.1);
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--brand);
+  color: var(--brand-soft);
 }
 .calc h3 {
   margin-top: 10px;
+  color: var(--paper);
   max-width: 22ch;
   font-size: clamp(1.45rem, 2.4vw, 2rem);
   line-height: 1.05;
@@ -525,7 +571,7 @@ border-top: 1px solid rgba(249, 249, 255, 0.1);
   max-width: 36ch;
   font-size: 15px;
   line-height: 1.5;
-  opacity: 0.78;
+  color: rgba(249, 249, 255, 0.72);
 }
 .calc-controls {
   display: grid;
@@ -538,7 +584,7 @@ border-top: 1px solid rgba(249, 249, 255, 0.1);
   justify-content: space-between;
   gap: 12px;
 }
-.calc-field label { font-size: 13px; font-weight: 600; line-height: 1.35; }
+.calc-field label { font-size: 13px; font-weight: 600; line-height: 1.35; color: var(--paper); }
 .calc-field output {
   font-family: var(--label);
   font-size: 16px;
@@ -548,14 +594,15 @@ border-top: 1px solid rgba(249, 249, 255, 0.1);
 .calc-field input[type="range"] {
   width: 100%;
   margin-top: 14px;
-  accent-color: var(--brand);
+  accent-color: var(--brand-soft);
   cursor: pointer;
 }
 .calc-result {
   grid-column: 1 / -1;
   padding: clamp(20px, 3vw, 28px);
   border-radius: var(--radius);
-  background: var(--brand-deep);
+  background: rgba(249, 249, 255, 0.08);
+  border: 1px solid rgba(249, 249, 255, 0.16);
   color: var(--paper);
 }
 .calc-figure {
@@ -1298,38 +1345,42 @@ form .btn-block { margin-top: 8px; }
 
   .btn-row { display: grid; gap: 10px; }
   .btn-row .btn { width: 100%; }
-  .hero { padding-block: 40px 56px; }
-  .hero .btn-row {
-    justify-content: stretch;
-    margin-top: 26px;
+  /* Hero mobile: solo titolo e sottotitolo, allineati a sinistra come su
+     desktop. Nessun render (a 210px la UI è illeggibile) e nessuna CTA:
+     l'unica azione di prenotazione è quella nell'header, sempre visibile. */
+  .hero { --hero-top: 24px; padding-bottom: 44px; }
+  .hero-inner { align-items: flex-start; }
+  .hero-copy { text-align: left; }
+  .hero h1 {
+    margin-top: 0;
+    margin-inline: 0;
+    max-width: 22ch;
+    font-size: 2.4rem;
+    line-height: 1.02;
+    letter-spacing: -0.025em;
   }
+  .hero-sub {
+    margin: 18px 0 0;
+    max-width: 34ch;
+    font-size: 16px;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+  .hero .eyebrow,
+  .hero .micro-row,
+  .hero .btn-row,
+  .hero-media { display: none; }
   .micro-row { display: grid; gap: 6px; }
   .micro-row li { gap: 0; }
   .micro-row li:not(:last-child)::after { display: none; }
 
-  .hero h1 { margin-top: 0; }
-  .hero .eyebrow,
-  .hero-sub,
-  .hero .micro-row,
-  .hero .btn-row .btn-ghost,
-  .hero-media figcaption { display: none; }
-
-  .hero-desktop { display: none; }
-  .hero-media { margin-top: 28px; }
-  .hero-phone {
-    position: static;
-    display: block;
-    width: min(54%, 210px);
-    margin-inline: auto;
-    border: 7px solid #22262e;
-    border-radius: 30px;
-  }
-
   .fab-right { display: none; }
 
   .pain-grid { grid-template-columns: minmax(0, 1fr); margin-top: 36px; }
+  /* Padding orizzontale non nullo: a piena larghezza il testo arrivava a filo
+     del bordo della card e sembrava uscire. */
   .pain,
-  .pain:nth-child(n + 4) { grid-column: auto; padding: 22px 0 24px; }
+  .pain:nth-child(n + 4) { grid-column: auto; padding: 22px 20px 24px; }
   .closing-line { margin-top: 44px; }
   .calc { grid-template-columns: minmax(0, 1fr); padding: 22px; }
   .calc-result { padding: 22px; }
@@ -1348,19 +1399,13 @@ form .btn-block { margin-top: 8px; }
 }
 
 @media (max-width: 640px) and (max-height: 720px) {
-  .hero { padding-block: 28px 44px; }
-  .hero h1 { font-size: 2.25rem; }
-  .hero .btn-row { margin-top: 18px; }
-  .hero-media { margin-top: 20px; }
-  .hero-phone { width: min(48%, 170px); }
+  .hero { --hero-top: 16px; padding-bottom: 40px; }
+  .hero h1 { font-size: 2.2rem; }
 }
 
 @media (max-width: 640px) and (max-height: 600px) {
-  .hero { padding-block: 24px 36px; }
-  .hero h1 { font-size: 2rem; }
-  .hero .btn-row { margin-top: 16px; }
-  .hero-media { margin-top: 16px; }
-  .hero-phone { width: min(42%, 160px); }
+  .hero { --hero-top: 12px; padding-bottom: 32px; }
+  .hero h1 { font-size: 2.05rem; }
 }
 
 @media (max-width: 360px) {

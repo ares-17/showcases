@@ -19,6 +19,28 @@
     direct.href = waUrl('Ciao, vorrei informazioni su StudioMS e una demo di 20 minuti.');
   }
 
+  /* ------------------------------------------------------------ header */
+  // In cima l'header è trasparente: la banda scura della hero passa sotto.
+  // Appena si scorre prende fondo carta semi-opaco. Soglia bassa e rAF per
+  // non far lampeggiare lo stato durante lo scroll.
+  var header = document.querySelector('.site-header');
+  if (header) {
+    var headerTick = false;
+    function syncHeader() {
+      headerTick = false;
+      header.dataset.scrolled = window.scrollY > 8 ? 'true' : 'false';
+    }
+    function requestHeader() {
+      if (!headerTick) {
+        headerTick = true;
+        window.requestAnimationFrame(syncHeader);
+      }
+    }
+    window.addEventListener('scroll', requestHeader, { passive: true });
+    window.addEventListener('resize', requestHeader);
+    syncHeader();
+  }
+
   /* ------------------------------------------------------------ reveals */
   var revealEls = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
   if ('IntersectionObserver' in window && revealEls.length) {

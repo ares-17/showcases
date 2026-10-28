@@ -76,6 +76,13 @@ const failures = [];
 const notes = [];
 const fail = (msg) => failures.push(msg);
 
+/** Canale alpha di un colore computed: "rgba(249, 249, 255, 0.82)" -> 0.82 */
+const alphaOf = (color) => {
+  const parts = String(color).match(/[\d.]+/g);
+  if (!parts) return 1;
+  return parts.length === 4 ? Number(parts[3]) : 1;
+};
+
 async function settle(page) {
   // lo scroll fluido del CSS renderebbe le misure dipendenti dal tempo
   await page.addStyleTag({ content: 'html{scroll-behavior:auto !important}' });
@@ -149,12 +156,23 @@ async function run() {
           const h1 = document.querySelector('.hero h1');
           const h1Style = getComputedStyle(h1);
           const fab = document.getElementById('fab-right');
+          const header = document.querySelector('.site-header');
+          const headerStyle = getComputedStyle(header);
           return {
+            header: {
+              position: headerStyle.position,
+              background: headerStyle.backgroundColor,
+              height: Math.round(header.getBoundingClientRect().height),
+              brand: getComputedStyle(document.querySelector('.site-header .brand')).color,
+              h1Top: Math.round(h1.getBoundingClientRect().top),
+            },
             copy: box('.hero-copy'),
             desktop: box('.hero-desktop'),
             phone: box('.hero-phone'),
             fab: box('#fab-right'),
             h1Lines: Math.round(h1.getBoundingClientRect().height / parseFloat(h1Style.lineHeight)),
+            heroPrimary: document.querySelectorAll('.hero .btn-primary').length,
+            headerCtaHref: document.querySelector('.site-header .btn-primary')?.getAttribute('href'),
             fabTag: fab?.tagName,
             fabHref: fab?.getAttribute('href'),
             fabPosition: fab ? getComputedStyle(fab).position : null,
@@ -165,6 +183,26 @@ async function run() {
         if (hero.copy && hero.desktop && hero.copy.right > hero.desktop.left + 1) fail(`desktop: copy e screenshot si sovrappongono (${hero.copy.right} > ${hero.desktop.left})`);
         if (hero.phone && hero.phone.bottom > 900) fail(`desktop: telefono hero sotto la piega (${hero.phone.bottom}px)`);
         if (hero.h1Lines > 3) fail(`desktop: H1 su ${hero.h1Lines} righe (max 3)`);
+        if (hero.heroPrimary !== 0) fail(`desktop: CTA primaria nella hero (${hero.heroPrimary}); l'unica azione è nell'header`);
+        if (hero.headerCtaHref !== '#demo') fail(`desktop: CTA header non punta a #demo (${hero.headerCtaHref})`);
+        if (hero.header.position !== 'fixed') fail(`header: non è fixed (${hero.header.position})`);
+        if (alphaOf(hero.header.background) > 0.05) fail(`header: ha già un fondo in cima (${hero.header.background})`);
+        if (hero.header.h1Top < hero.header.height) fail(`header: copre il titolo (${hero.header.h1Top} < ${hero.header.height})`);
+        const brandLum = Number((hero.header.brand.match(/[\d.]+/g) || []).slice(0, 3).reduce((a, v) => a + Number(v), 0)) / 3;
+        if (brandLum < 200) fail(`header: wordmark non leggibile sulla banda scura (${hero.header.brand})`);
+
+        await page.evaluate(() => window.scrollTo(0, 420));
+        await page.waitForTimeout(250);
+        const headerScrolled = await page.evaluate(() => {
+          const h = document.querySelector('.site-header');
+          return { background: getComputedStyle(h).backgroundColor, state: h.dataset.scrolled };
+        });
+        if (headerScrolled.state !== 'true') fail('header: data-scrolled non impostato dopo lo scroll');
+        const scrolledAlpha = alphaOf(headerScrolled.background);
+        if (scrolledAlpha < 0.6) fail(`header: fondo troppo trasparente dopo lo scroll (${headerScrolled.background})`);
+        if (scrolledAlpha > 0.95) fail(`header: fondo troppo opaco dopo lo scroll, non lascia intravedere (${headerScrolled.background})`);
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.waitForTimeout(250);
         if (hero.fabTag !== 'A' || hero.fabHref !== '#demo') fail(`desktop: FAB non è un link a #demo (${hero.fabTag}, ${hero.fabHref})`);
         if (hero.fabPosition !== 'fixed') fail(`desktop: FAB non è fixed (${hero.fabPosition})`);
         if (!hero.fab || hero.fab.display === 'none') fail('desktop: FAB nascosto');
@@ -219,19 +257,25 @@ async function run() {
             const el = document.querySelector(sel);
             return el ? getComputedStyle(el).display : null;
           };
+          const headerEl = document.querySelector('.site-header');
+          const headerCta = headerEl.querySelector('.btn-primary');
           return {
+            header: { height: Math.round(headerEl.getBoundingClientRect().height) },
+            h1Top: Math.round(document.querySelector('.hero h1').getBoundingClientRect().top),
             copy: box('.hero-copy'),
-            phone: box('.hero-phone'),
             h1: display('.hero h1'),
-            primary: display('.hero .btn-row .btn-primary'),
+            sub: display('.hero-sub'),
+            media: display('.hero-media'),
+            heroPrimary: document.querySelectorAll('.hero .btn-primary').length,
+            headerCta: headerCta
+              ? { display: getComputedStyle(headerCta).display, href: headerCta.getAttribute('href') }
+              : null,
             fab: display('#fab-right'),
             mobileCta: !!document.getElementById('mobile-cta'),
             hidden: {
               eyebrow: display('.hero .eyebrow'),
-              sub: display('.hero-sub'),
               micro: display('.hero .micro-row'),
-              ghost: display('.hero .btn-row .btn-ghost'),
-              caption: display('.hero-media figcaption'),
+              btnRow: display('.hero .btn-row'),
             },
           };
         });
@@ -240,9 +284,13 @@ async function run() {
         for (const [name, value] of Object.entries(mobile.hidden)) {
           if (value !== 'none') fail(`${label}: ${name} hero ancora visibile (${value})`);
         }
-        if (mobile.h1 === 'none' || mobile.primary === 'none') fail(`${label}: H1 o CTA primaria nascosti`);
-        if (!mobile.phone || mobile.phone.display === 'none') fail(`${label}: telefono hero nascosto`);
-        if (mobile.phone && mobile.phone.bottom > viewport.height) fail(`${label}: telefono sotto la piega (${mobile.phone.bottom} > ${viewport.height})`);
+        if (mobile.h1 === 'none') fail(`${label}: H1 nascosto`);
+        if (mobile.sub === 'none') fail(`${label}: sottotitolo hero nascosto`);
+        if (mobile.h1Top < mobile.header.height) fail(`${label}: header copre il titolo (${mobile.h1Top} < ${mobile.header.height})`);
+        if (mobile.media !== 'none') fail(`${label}: render hero ancora visibile su mobile (${mobile.media})`);
+        if (mobile.heroPrimary !== 0) fail(`${label}: CTA primaria nella hero (${mobile.heroPrimary})`);
+        if (!mobile.headerCta || mobile.headerCta.display === 'none') fail(`${label}: CTA header non visibile`);
+        else if (mobile.headerCta.href !== '#demo') fail(`${label}: CTA header non punta a #demo (${mobile.headerCta.href})`);
         if (mobile.copy && mobile.copy.bottom > viewport.height) fail(`${label}: copy hero sotto la piega (${mobile.copy.bottom} > ${viewport.height})`);
       }
 
