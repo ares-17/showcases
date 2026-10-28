@@ -154,15 +154,33 @@ async function run() {
       }
 
       if (label.startsWith('mobile')) {
-        const ctaHiddenAtTop = await page.evaluate(() => document.getElementById('mobile-cta').hidden);
-        if (!ctaHiddenAtTop) fail(`${label}: la CTA mobile è visibile sopra la piega`);
+        const ctaState = () => page.evaluate(() => {
+          const el = document.getElementById('mobile-cta');
+          return { hidden: el.hidden, display: getComputedStyle(el).display };
+        });
+        const atTop = await ctaState();
+        if (!atTop.hidden) fail(`${label}: la CTA mobile è visibile sopra la piega`);
+        if (atTop.display !== 'none') fail(`${label}: la CTA mobile ha hidden ma resta display:${atTop.display} sopra la piega`);
         await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight * 0.5));
         await page.waitForTimeout(250);
-        const ctaVisibleMid = await page.evaluate(() => !document.getElementById('mobile-cta').hidden);
-        if (!ctaVisibleMid) fail(`${label}: la CTA mobile non compare a metà pagina`);
+        const mid = await ctaState();
+        if (mid.hidden) fail(`${label}: la CTA mobile non compare a metà pagina`);
+        if (mid.display === 'none') fail(`${label}: la CTA mobile resta nascosta a metà pagina`);
       }
 
       await page.screenshot({ path: join(SHOTS, `${label.replace(/\s+/g, '-')}.png`), fullPage: false });
+
+      if (label.startsWith('mobile')) {
+        await page.evaluate(() => document.getElementById('demo').scrollIntoView({ block: 'start' }));
+        await page.waitForTimeout(400);
+        const inDemo = await page.evaluate(() => {
+          const el = document.getElementById('mobile-cta');
+          return { hidden: el.hidden, display: getComputedStyle(el).display };
+        });
+        if (!inDemo.hidden) fail(`${label}: la CTA mobile resta visibile dentro #demo`);
+        if (inDemo.display !== 'none') fail(`${label}: la CTA mobile ha hidden ma resta display:${inDemo.display} dentro #demo`);
+      }
+
       await page.close();
     }
   } finally {

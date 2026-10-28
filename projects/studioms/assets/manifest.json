@@ -9,7 +9,7 @@
   "screens": [
     {
       "id": "dashboard",
-      "landing": { "master": "landing/assets/screens/dashboard.png", "widths": [1440] },
+      "landing": { "master": "landing/assets/screens/dashboard.png", "widths": [] },
       "deck": { "crops": ["assets/screens/dashboard--hero.png", "assets/screens/dashboard--pane.png"] }
     },
     {
@@ -24,12 +24,12 @@
     },
     {
       "id": "cartella-clinica",
-      "landing": { "master": "landing/assets/screens/cartella-clinica.png", "widths": [1440] },
+      "landing": { "master": "landing/assets/screens/cartella-clinica.png", "widths": [] },
       "deck": { "crops": ["assets/screens/cartella--band.png"] }
     },
     {
       "id": "fatturazione",
-      "landing": { "master": "landing/assets/screens/fatturazione.png", "widths": [1440] },
+      "landing": { "master": "landing/assets/screens/fatturazione.png", "widths": [] },
       "deck": { "crops": ["assets/screens/fatturazione--pane.png"] }
     },
     {

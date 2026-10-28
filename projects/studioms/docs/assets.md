@@ -42,11 +42,11 @@ Cinque file in `assets/screens/` sono varianti di ritaglio scartate durante il m
 
 | Schermata | WebP landing | Ritagli deck |
 |---|---|---|
-| dashboard | 1440 | `--hero`, `--pane` |
+| dashboard | — | `--hero`, `--pane` |
 | agenda | 720, 1440 | `--band` |
 | agenda-wide | 720, 1440 | — |
-| cartella-clinica | 1440 | `--band` |
-| fatturazione | 1440 | `--pane` |
+| cartella-clinica | — | `--band` |
+| fatturazione | — | `--pane` |
 | sistema-ts | 720, 1440 | `--pane` |
 | whatsapp | 720, 1440 | `--pane` |
 | scheda-paziente | 720, 1440 | — |

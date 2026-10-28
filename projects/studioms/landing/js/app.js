@@ -34,51 +34,56 @@
     revealEls.forEach(function (el) { io.observe(el); });
   }
 
-  /* ------------------------------------------------------------ gallery tabs */
-  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  /* ------------------------------------------------------------ calcolatore */
+  var calcSlot = document.getElementById('calc-slot');
+  if (calcSlot) {
+    var calcValue = document.getElementById('calc-value');
+    var slotOut = document.getElementById('calc-slot-out');
+    var valueOut = document.getElementById('calc-value-out');
+    var monthEl = document.getElementById('calc-month');
+    var yearEl = document.getElementById('calc-year');
+    var number = new Intl.NumberFormat('it-IT', { useGrouping: 'always' });
+    var shown = 1170;
+    var frame = null;
 
-  function selectTab(tab, focus) {
-    tabs.forEach(function (t) {
-      var selected = t === tab;
-      t.classList.toggle('is-active', selected);
-      t.setAttribute('aria-selected', selected ? 'true' : 'false');
-      t.tabIndex = selected ? 0 : -1;
-      var panel = document.getElementById(t.getAttribute('aria-controls'));
-      if (panel) { panel.hidden = !selected; }
-    });
-    if (focus) { tab.focus(); }
-  }
+    function setFigure(target) {
+      if (reduceMotion || !window.requestAnimationFrame) {
+        shown = target;
+        monthEl.textContent = number.format(target) + ' €';
+        return;
+      }
+      var from = shown;
+      var start = performance.now();
+      if (frame) { cancelAnimationFrame(frame); }
+      function step(now) {
+        var t = Math.min(1, (now - start) / 420);
+        var eased = 1 - Math.pow(1 - t, 3);
+        shown = Math.round(from + (target - from) * eased);
+        monthEl.textContent = number.format(shown) + ' €';
+        if (t < 1) {
+          frame = requestAnimationFrame(step);
+        } else {
+          shown = target;
+          frame = null;
+        }
+      }
+      frame = requestAnimationFrame(step);
+    }
 
-  tabs.forEach(function (tab, index) {
-    tab.addEventListener('click', function () { selectTab(tab, false); });
-    tab.addEventListener('keydown', function (event) {
-      var next = null;
-      if (event.key === 'ArrowRight') { next = tabs[(index + 1) % tabs.length]; }
-      if (event.key === 'ArrowLeft') { next = tabs[(index - 1 + tabs.length) % tabs.length]; }
-      if (event.key === 'Home') { next = tabs[0]; }
-      if (event.key === 'End') { next = tabs[tabs.length - 1]; }
-      if (next) { event.preventDefault(); selectTab(next, true); }
-    });
-  });
+    function updateCalc() {
+      var slots = Number(calcSlot.value) || 0;
+      var fee = Number(calcValue.value) || 0;
+      var yearly = slots * fee * 52;
+      var monthly = Math.round(yearly / 12);
+      slotOut.textContent = number.format(slots);
+      valueOut.textContent = number.format(fee) + ' €';
+      yearEl.textContent = number.format(yearly) + ' €';
+      setFigure(monthly);
+    }
 
-  /* the five closed panels are lazy: warm them once the page settles so
-     switching tab never flashes an empty frame */
-  function prefetchPanels() {
-    var conn = navigator.connection;
-    if (conn && (conn.saveData || /2g/.test(conn.effectiveType || ''))) { return; }
-    tabs.forEach(function (tab) {
-      var panel = document.getElementById(tab.getAttribute('aria-controls'));
-      if (!panel) { return; }
-      Array.prototype.forEach.call(panel.querySelectorAll('img'), function (img) {
-        if (img.currentSrc) { return; }
-        new Image().src = img.currentSrc || img.src;
-      });
-    });
-  }
-  if ('requestIdleCallback' in window) {
-    window.requestIdleCallback(prefetchPanels, { timeout: 2500 });
-  } else {
-    window.setTimeout(prefetchPanels, 1800);
+    calcSlot.addEventListener('input', updateCalc);
+    calcValue.addEventListener('input', updateCalc);
+    updateCalc();
   }
 
   /* ------------------------------------------------------------ form */
