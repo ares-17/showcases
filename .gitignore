@@ -10,3 +10,9 @@ out/
 *.mov
 *.gif
 .DS_Store
+
+# segreti: mai nel repo
+.env
+.env.*
+*mcp-token*
+/.claude/

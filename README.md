@@ -30,6 +30,7 @@ Stato attuale: un solo progetto, `projects/studioms/` (primo caso: gestionale pe
 | `docs/design.md` | Come usare le skill di design/frontend senza scivolare nell'estetica generica |
 | `docs/lessons.md` | Le trappole che sono già costate tempo, con il costo misurato |
 | `docs/migration.md` | Come spostare un progetto nato nella cartella sbagliata |
+| `docs/openscreen.md` | Video demo registrati dall'app: installazione, MCP, flusso, problemi noti |
 
 ## Skill, per cosa
 
@@ -37,6 +38,7 @@ Stato attuale: un solo progetto, `projects/studioms/` (primo caso: gestionale pe
 |---|---|
 | Video, animazioni, captions | `/hyperframes`, `/hyperframes-cli`, `/hyperframes-registry` |
 | Audio, immagini, voiceover, colori | `/media-use` |
+| Demo registrate dell'app, video per PR o X | `openscreen-demo` (skill del progetto) |
 | Landing, one-pager, UI | `design-taste-frontend`, `frontend-design`, `web-design-guidelines` |
 | Da immagine a codice | `image-to-code`, `imagegen-frontend-web` |
 | Controllo visivo finale | `visual-qa` |
@@ -51,6 +53,43 @@ npm run qa            # landing nei 4 viewport, hero/FAB, form
 npm run check         # lint/runtime/layout/motion/contrast del video
 npm run render -- -o renders/<slug>-deck.mp4
 ```
+
+## Video demo registrati (OpenScreen)
+
+Per registrare **l'app vera** — demo da 20–60 s, un video da attaccare a una PR, un clip per X — OpenScreen è installato e collegato all'agente: RPM `openscreen-2.1.2`, eseguibile `/usr/bin/openscreen`, skill `openscreen-demo` in `.agents/skills/` (registrata in `skills-lock.json`).
+
+Si registra **dall'app**, con il suo pulsante: è l'unico modo affidabile su Linux Wayland, perché la sorgente la sceglie il selettore del desktop e da un processo senza finestra il dialogo può non comparire. Poi le modifiche le faccio io via MCP e tu le ritrovi nell'editor, annullabili con `Ctrl+Z`.
+
+```bash
+sudo dnf install ./Openscreen-Linux-*.rpm                     # RPM da getopenscreen.com/download
+npx skills add getopenscreen/openscreen --skill openscreen-demo -y
+openscreen help                                               # deve elencare "openscreen mcp"
+```
+
+Collegamento all'agente: in OpenScreen *AI settings* → *MCP server* si accende il server, si sceglie la porta (qui **47821**) e si copia il token. Il token sta in un file, mai nel repo:
+
+```bash
+printf '%s' '<token>' > ~/.config/openscreen/mcp-token && chmod 600 ~/.config/openscreen/mcp-token
+```
+
+In `~/.config/opencode/opencode.json`, poi riavviare la sessione:
+
+```json
+{
+  "mcp": {
+    "openscreen": {
+      "type": "remote",
+      "url": "http://127.0.0.1:47821/mcp",
+      "enabled": true,
+      "headers": { "Authorization": "Bearer {file:/home/aress/.config/openscreen/mcp-token}" }
+    }
+  }
+}
+```
+
+`type: "remote"` perché è un URL; `{file:…}` legge il token dal file (`{env:VAR}` funziona solo se opencode eredita la shell). Il server `openscreen mcp` su stdio resta come fallback ad app chiusa, disabilitato: mai attivo insieme a questo, o ogni strumento compare due volte.
+
+Registrazione su Wayland, zoom sui click (regola udev), CLI, verifica dell'handshake e problemi noti: `docs/openscreen.md`.
 
 ## Regola generale
 

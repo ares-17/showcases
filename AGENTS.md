@@ -10,6 +10,8 @@ Qui si producono video di presentazione, landing e materiale commerciale per **u
 | Scrivere testi che vendono a freddo | `docs/copy.md` |
 | Landing/UI senza estetica generica | `docs/design.md` |
 | Trappole già pagate (asset, render, test) | `docs/lessons.md` |
+| Fare una demo registrata dell'app (OpenScreen) | `docs/openscreen.md` |
+| Stato di OpenScreen, cosa manca, playbook scelto | `docs/openscreen-stato.md` |
 | Il prodotto specifico | `projects/<slug>/AGENTS.md` e `projects/<slug>/docs/` |
 
 ## Regole non negoziabili
