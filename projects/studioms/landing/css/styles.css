@@ -676,7 +676,11 @@ border-top: 0;
   height: 1px;
   background: var(--line);
 }
-.step { position: relative; padding-top: 38px; }
+.step { --step-i: 0; position: relative; padding-top: 38px; }
+.step:nth-child(2) { --step-i: 1; }
+.step:nth-child(3) { --step-i: 2; }
+.step:nth-child(4) { --step-i: 3; }
+.step:nth-child(5) { --step-i: 4; }
 .step-dot {
   position: absolute;
   top: 0;
@@ -707,6 +711,29 @@ border-top: 0;
   font-size: 14.5px;
   line-height: 1.5;
 }
+.reveal-on .steps .step-dot {
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.42s var(--ease), transform 0.5s var(--ease);
+}
+.reveal-on .steps.is-in .step-dot {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--step-i) * 180ms);
+}
+.reveal-on .steps .step-num,
+.reveal-on .steps .step h3,
+.reveal-on .steps .step p {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s var(--ease), transform 0.55s var(--ease);
+}
+.reveal-on .steps.is-in .step-num,
+.reveal-on .steps.is-in .step h3,
+.reveal-on .steps.is-in .step p { opacity: 1; transform: none; }
+.reveal-on .steps.is-in .step-num,
+.reveal-on .steps.is-in .step h3 { transition-delay: calc(var(--step-i) * 180ms + 40ms); }
+.reveal-on .steps.is-in .step p { transition-delay: calc(var(--step-i) * 180ms + 120ms); }
 .band-note {
   margin-top: 52px;
   max-width: 860px;
@@ -774,7 +801,10 @@ border-top: 0;
   width: 100%;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: 0 30px 70px -48px rgba(25, 28, 32, 0.45);
+  box-shadow:
+    0 0 34px rgba(25, 28, 32, 0.06),
+    0 10px 24px -16px rgba(25, 28, 32, 0.22),
+    0 38px 84px -50px rgba(25, 28, 32, 0.5);
 }
 .module-media figcaption {
   margin-top: 12px;
@@ -1309,6 +1339,9 @@ form .btn-block { margin-top: 8px; }
   transition-delay: calc(var(--i, 0) * 65ms);
 }
 .reveal-on [data-reveal].is-in { opacity: 1; transform: none; }
+.reveal-on .pain-grid .pain[data-reveal] {
+  transition-delay: calc(var(--i, 0) * 140ms);
+}
 
 @media (prefers-reduced-motion: reduce) {
   .plans { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1431,6 +1464,10 @@ form .btn-block { margin-top: 8px; }
     transition-duration: 0.001ms !important;
   }
   .reveal-on [data-reveal] { opacity: 1; transform: none; }
+  .reveal-on .steps .step-num,
+  .reveal-on .steps .step h3,
+  .reveal-on .steps .step p,
+  .reveal-on .steps .step-dot { opacity: 1; transform: none; }
   .btn:hover .arrow { transform: none; }
   html { scroll-behavior: auto; }
 }

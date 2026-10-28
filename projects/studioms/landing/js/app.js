@@ -42,7 +42,11 @@
   }
 
   /* ------------------------------------------------------------ reveals */
-  var revealEls = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+  // Le card dei problemi hanno un observer dedicato: entrano in cascata
+  // tutte insieme, con il ritardo impostato da --i nel CSS.
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]')).filter(function (el) {
+    return !el.classList.contains('pain');
+  });
   if ('IntersectionObserver' in window && revealEls.length) {
     document.documentElement.classList.add('reveal-on');
     var io = new IntersectionObserver(function (entries) {
@@ -56,6 +60,17 @@
     revealEls.forEach(function (el) { io.observe(el); });
   }
 
+  var painGrid = document.querySelector('.pain-grid');
+  if ('IntersectionObserver' in window && painGrid) {
+    var painCards = Array.prototype.slice.call(painGrid.querySelectorAll('.pain'));
+    var painIo = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) { return; }
+      painIo.disconnect();
+      painCards.forEach(function (card) { card.classList.add('is-in'); });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.12 });
+    painIo.observe(painGrid);
+  }
+
   /* ------------------------------------------------------------ calcolatore */
   var calcSlot = document.getElementById('calc-slot');
   if (calcSlot) {
@@ -64,14 +79,21 @@
     var valueOut = document.getElementById('calc-value-out');
     var monthEl = document.getElementById('calc-month');
     var yearEl = document.getElementById('calc-year');
+    var calc = document.querySelector('.calc');
     var number = new Intl.NumberFormat('it-IT', { useGrouping: 'always' });
     var shown = 1170;
     var frame = null;
+    var counted = false;
 
-    function setFigure(target) {
-      if (reduceMotion || !window.requestAnimationFrame) {
+    function paint(value) {
+      monthEl.textContent = number.format(Math.round(value)) + ' €';
+    }
+
+    function setFigure(target, instant) {
+      if (instant || reduceMotion || !window.requestAnimationFrame) {
         shown = target;
-        monthEl.textContent = number.format(target) + ' €';
+        if (frame) { cancelAnimationFrame(frame); frame = null; }
+        paint(target);
         return;
       }
       var from = shown;
@@ -81,7 +103,7 @@
         var t = Math.min(1, (now - start) / 420);
         var eased = 1 - Math.pow(1 - t, 3);
         shown = Math.round(from + (target - from) * eased);
-        monthEl.textContent = number.format(shown) + ' €';
+        paint(shown);
         if (t < 1) {
           frame = requestAnimationFrame(step);
         } else {
@@ -92,20 +114,38 @@
       frame = requestAnimationFrame(step);
     }
 
-    function updateCalc() {
+    function monthlyTotal() {
+      var slots = Number(calcSlot.value) || 0;
+      var fee = Number(calcValue.value) || 0;
+      return Math.round(slots * fee * 52 / 12);
+    }
+
+    function updateCalc(instant) {
       var slots = Number(calcSlot.value) || 0;
       var fee = Number(calcValue.value) || 0;
       var yearly = slots * fee * 52;
-      var monthly = Math.round(yearly / 12);
       slotOut.textContent = number.format(slots);
       valueOut.textContent = number.format(fee) + ' €';
       yearEl.textContent = number.format(yearly) + ' €';
-      setFigure(monthly);
+      setFigure(monthlyTotal(), instant === true);
     }
 
-    calcSlot.addEventListener('input', updateCalc);
-    calcValue.addEventListener('input', updateCalc);
-    updateCalc();
+    calcSlot.addEventListener('input', function () { updateCalc(false); });
+    calcValue.addEventListener('input', function () { updateCalc(false); });
+    updateCalc(true);
+
+    if (calc && 'IntersectionObserver' in window) {
+      var calcIo = new IntersectionObserver(function (entries) {
+        if (!entries[0].isIntersecting || counted) { return; }
+        counted = true;
+        calcIo.disconnect();
+        if (reduceMotion) { return; }
+        shown = 0;
+        paint(0);
+        setFigure(monthlyTotal(), false);
+      }, { threshold: 0.35 });
+      calcIo.observe(calc);
+    }
   }
 
   /* ------------------------------------------------------------ form */
