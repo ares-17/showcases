@@ -23,7 +23,7 @@ Verifica:
 | Form valido | `#result` non visibile, o `#wa-link` non è `https://wa.me/…` con lo studio nel testo |
 | Header | non è `fixed`, ha già un fondo in cima, copre il titolo, wordmark scuro sulla banda, o dopo lo scroll il fondo è fuori da 0.60–0.95 di opacità |
 | Hero desktop | screenshot sotto la piega, copy/media sovrapposti, H1 su più di 3 righe |
-| Hero mobile | sottotitolo nascosto, `.hero-media` visibile, una CTA primaria dentro la hero, la CTA dell'header assente o con `href` diverso da `#demo`, o copy che scende sotto la piega a 390×844, 375×667 o 320×568 |
+| Hero mobile | sottotitolo nascosto, `.hero-media` nascosto, telefono nascosto o che scavalca la didascalia, una CTA primaria dentro la hero, la CTA dell'header assente o con `href` diverso da `#demo`, o copy che scende sotto la piega a 390×844, 375×667 o 320×568 |
 | FAB | non è `<a href="#demo">`, non è `fixed`, è visibile su mobile, o non si nasconde dentro `#demo` |
 | Bottom bar | `#mobile-cta` è ancora nel DOM |
 

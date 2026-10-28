@@ -53,7 +53,8 @@ Il fondo a 0.88 lascia intravedere il contenuto senza sporcare la barra; sopra 0
 
 - ≥961px: griglia a due colonne (copy ~55%, media ~45%), copy allineata a sinistra, H1 max 3 righe, screenshot intero sopra la piega a 1440×900.
 - 641–960px: hero centrata, copy completa, screenshot a piena larghezza.
-- ≤640px: solo `h1` e `.hero-sub`, allineati a sinistra (H1 2.4rem, `line-height` 1.02, `max-width` 22ch); eyebrow, micro-row, CTA (primaria e secondaria), `.hero-media` e figcaption nascosti. Nessuno screenshot: a 210px di larghezza la UI è illeggibile.
+- ≤640px: `h1` e `.hero-sub` allineati a sinistra (H1 2.4rem, `line-height` 1.02, `max-width` 22ch), poi la stessa composizione del desktop rimpicciolita: screenshot `agenda-wide` con il telefono in sovrapposizione a sinistra e didascalia sotto. Eyebrow, micro-row e `.btn-row` restano nascosti; l'unica CTA è quella dell'header.
+- Il telefono è `position: absolute` dentro `.hero-frame`, il wrapper che contiene solo le due immagini: così sporge sullo screenshot e non sulla `figure`, e la didascalia non viene coperta.
 - Le immagini hanno `sizes` allineati al layout: desktop ~46vw, telefono ~12vw desktop.
 
 ## FAB

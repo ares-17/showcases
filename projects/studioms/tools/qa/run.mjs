@@ -266,6 +266,8 @@ async function run() {
             h1: display('.hero h1'),
             sub: display('.hero-sub'),
             media: display('.hero-media'),
+            phone: box('.hero-phone'),
+            caption: box('.hero-media figcaption'),
             heroPrimary: document.querySelectorAll('.hero .btn-primary').length,
             headerCta: headerCta
               ? { display: getComputedStyle(headerCta).display, href: headerCta.getAttribute('href') }
@@ -287,7 +289,11 @@ async function run() {
         if (mobile.h1 === 'none') fail(`${label}: H1 nascosto`);
         if (mobile.sub === 'none') fail(`${label}: sottotitolo hero nascosto`);
         if (mobile.h1Top < mobile.header.height) fail(`${label}: header copre il titolo (${mobile.h1Top} < ${mobile.header.height})`);
-        if (mobile.media !== 'none') fail(`${label}: render hero ancora visibile su mobile (${mobile.media})`);
+        if (mobile.media === 'none') fail(`${label}: render hero nascosto su mobile`);
+        if (mobile.phone && mobile.phone.display === 'none') fail(`${label}: telefono hero nascosto su mobile`);
+        if (mobile.phone && mobile.caption && mobile.phone.bottom > mobile.caption.top) {
+          fail(`${label}: telefono hero sopra la didascalia (${mobile.phone.bottom} > ${mobile.caption.top})`);
+        }
         if (mobile.heroPrimary !== 0) fail(`${label}: CTA primaria nella hero (${mobile.heroPrimary})`);
         if (!mobile.headerCta || mobile.headerCta.display === 'none') fail(`${label}: CTA header non visibile`);
         else if (mobile.headerCta.href !== '#demo') fail(`${label}: CTA header non punta a #demo (${mobile.headerCta.href})`);

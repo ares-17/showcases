@@ -382,10 +382,14 @@ button { font: inherit; }
 .hero .micro-row li:not(:last-child)::after { background: rgba(249, 249, 255, 0.32); }
 
 .hero-media {
-  position: relative;
   width: 100%;
   max-width: 1160px;
   margin: clamp(40px, 6vw, 64px) auto 0;
+}
+/* Il telefono si aggancia allo screenshot, non alla figure: la didascalia
+   resta fuori dall'area in cui il telefono sporge. */
+.hero-frame {
+  position: relative;
 }
 .hero-desktop {
   display: block;
@@ -1345,9 +1349,10 @@ form .btn-block { margin-top: 8px; }
 
   .btn-row { display: grid; gap: 10px; }
   .btn-row .btn { width: 100%; }
-  /* Hero mobile: solo titolo e sottotitolo, allineati a sinistra come su
-     desktop. Nessun render (a 210px la UI è illeggibile) e nessuna CTA:
-     l'unica azione di prenotazione è quella nell'header, sempre visibile. */
+  /* Hero mobile: titolo e sottotitolo a sinistra come su desktop, poi la
+     stessa composizione del desktop (schermata larga + telefono in
+     sovrapposizione) rimpicciolita. Nessuna CTA: l'unica azione di
+     prenotazione è quella nell'header, sempre visibile. */
   .hero { --hero-top: 24px; padding-bottom: 44px; }
   .hero-inner { align-items: flex-start; }
   .hero-copy { text-align: left; }
@@ -1368,8 +1373,10 @@ form .btn-block { margin-top: 8px; }
   }
   .hero .eyebrow,
   .hero .micro-row,
-  .hero .btn-row,
-  .hero-media { display: none; }
+  .hero .btn-row { display: none; }
+  .hero-media { display: block; margin-top: 26px; }
+  .hero-phone { left: -8px; bottom: -10px; width: 22%; border-width: 3px; border-radius: 16px; }
+  .hero-media figcaption { margin-top: 22px; text-align: left; }
   .micro-row { display: grid; gap: 6px; }
   .micro-row li { gap: 0; }
   .micro-row li:not(:last-child)::after { display: none; }
